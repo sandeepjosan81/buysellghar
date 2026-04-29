@@ -1,0 +1,39 @@
+<?php
+
+
+namespace InnoShop\Panel\Resources;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+/**
+ * Product name resource class
+ * Specifically handles name retrieval for product models
+ */
+class ProductNameResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  Request  $request
+     * @return array
+     */
+    public function toArray(Request $request): array
+    {
+        return [
+            'id'   => $this->id,
+            'name' => $this->getName(),
+        ];
+    }
+
+    /**
+     * Get product name
+     * Uses fallbackName() method
+     *
+     * @return string
+     */
+    private function getName(): string
+    {
+        return $this->resource->fallbackName();
+    }
+}
