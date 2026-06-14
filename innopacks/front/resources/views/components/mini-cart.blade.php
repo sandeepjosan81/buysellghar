@@ -123,12 +123,12 @@ if (!window.cartApp) {
       // Methods
       const loadCart = async () => {
         try {
-          const response = await axios.get(urls.front_cart_mini)
-          if (response.success) {
-            cartItems.value = response.data.list || []
-            totalAmount.value = response.data.amount_format
-            updateCartIconQuantity(response.data.total_format)
-          }
+          // const response = await axios.get(urls.front_cart_mini)
+          // if (response.success) {
+          //   cartItems.value = response.data.list || []
+          //   totalAmount.value = response.data.amount_format
+          //   updateCartIconQuantity(response.data.total_format)
+          // }
         } catch (error) {
           inno.msg('Failed to load cart', 'error')
         }

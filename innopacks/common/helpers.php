@@ -21,6 +21,8 @@ use InnoShop\Common\Repositories\SettingRepo;
 use InnoShop\Common\Services\ImageService;
 use InnoShop\Common\Support\Registry;
 use InnoShop\Common\Models\Review;
+use InnoShop\Common\Models\Product\PropertyProps;
+use InnoShop\Common\Models\Product;
 
 if (! function_exists('load_settings')) {
     /**
@@ -1529,12 +1531,149 @@ if (! function_exists('theme_mix')) {
         }
     }
 
-    if (! function_exists('')) {
+    if (! function_exists('getTotalReviews')) {
         function getTotalReviews($productId)
             {
                 // $productId = 11;
                 return Review::where('product_id', $productId)->count();
             }
     }
+
+    if (! function_exists('getSuperArea')) {
+        function getSuperArea(Product $product)
+            {
+                $prop_label = $super_builtup_area ='';
+                $getAreaTypeOptions =  PropertyProps::getAreaTypeOptions();
+                if(!empty($product->propertyProps->super_builtup_area)){
+                    $searchKey = $product->propertyProps->super_builtup_area_type;
+                }else{
+                    $searchKey = $product->propertyProps->plot_area_type;
+                }
+                
+                $targetColumn = 'name';
+                $index = array_search($searchKey, array_column($getAreaTypeOptions, 'id'));
+                if ($index !== false) {
+                    $prop_label = $getAreaTypeOptions[$index][$targetColumn];
+                }
+
+                if(!empty($product->propertyProps->super_builtup_area)){
+                    $super_builtup_area =($product->propertyProps->super_builtup_area)? $product->propertyProps->super_builtup_area .' '. $prop_label  : '';
+                
+                }else{
+                    $super_builtup_area =($product->propertyProps->plot_area)? $product->propertyProps->plot_area .' '. $prop_label  : '';
+                
+                }
+
+                                                        
+                return $super_builtup_area;
+            }
+    }
+
+    if (! function_exists('getPropertyFor')) {
+        function getPropertyFor(Product $product){
+                $prop_label = '';
+                $getPropertyFor =  PropertyProps::getPropertyForOptions();
+                $searchKey = $product->propertyProps->property_for;
+                $targetColumn = 'name';
+                $index = array_search($searchKey, array_column($getPropertyFor, 'id'));
+                if ($index !== false) {
+                    $prop_label = $getPropertyFor[$index][$targetColumn];
+                }
+                $property_for =($product->propertyProps->property_for)? $product->propertyProps->property_for .' '. $prop_label  : '';
+                                                        
+                return $prop_label;
+        }
+    }
+
+    if (! function_exists('getFurnishedStatus')) {
+        function getFurnishedStatus(Product $product){
+                $prop_label = '';
+                $getFurnished =  PropertyProps::getFurnishedStatusOptions();
+                $searchKey = $product->propertyProps->furnished_status;
+                $targetColumn = 'name';
+                $index = array_search($searchKey, array_column($getFurnished, 'id'));
+                if ($index !== false) {
+                    $prop_label = $getFurnished[$index][$targetColumn];
+                }
+                $furnished_status =($product->propertyProps->furnished_status)? $product->propertyProps->furnished_status .' '. $prop_label  : '';
+                                                        
+                return $prop_label;
+        }
+    }
+
+
+    if (! function_exists('getAreaType')) {
+        function getAreaType(Product $product){
+                $prop_label = '';
+                $getAreaType =  PropertyProps::getAreaTypeOptions();
+                $searchKey = $product->propertyProps->plot_area_type;
+                $targetColumn = 'name';
+                $index = array_search($searchKey, array_column($getAreaType, 'id'));
+                if ($index !== false) {
+                    $prop_label = $getAreaType[$index][$targetColumn];
+                }
+                // $getAreaType =($product->propertyProps->plot_area_type)? $product->propertyProps->plot_area_type .' '. $prop_label  : '';
+                                                        
+                return $prop_label;
+        }
+    }
+
+    if (! function_exists('getCoverArea')) {
+        function getCoverArea(Product $product){
+                $prop_label = '';
+                $getAreaType =  PropertyProps::getAreaTypeOptions();
+                $searchKey = $product->propertyProps->covered_area_type;
+                $targetColumn = 'name';
+                $index = array_search($searchKey, array_column($getAreaType, 'id'));
+                if ($index !== false) {
+                    $prop_label = $getAreaType[$index][$targetColumn];
+                }
+                // $getAreaType =($product->propertyProps->covered_area_type)? $product->propertyProps->covered_area_type .' '. $prop_label  : '';
+                                                        
+                return $prop_label;
+        }
+    }
     
+    if (! function_exists('getCarpetArea')) {
+        function getCarpetArea(Product $product){
+                $prop_label = '';
+                $getAreaType =  PropertyProps::getAreaTypeOptions();
+                $searchKey = $product->propertyProps->carpet_area_type;
+                $targetColumn = 'name';
+                $index = array_search($searchKey, array_column($getAreaType, 'id'));
+                if ($index !== false) {
+                    $prop_label = $getAreaType[$index][$targetColumn];
+                }
+                // $getAreaType =($product->propertyProps->covered_area_type)? $product->propertyProps->covered_area_type .' '. $prop_label  : '';
+                                                        
+                return $prop_label;
+        }
+    }
+
+
+    if (! function_exists('getTransactionType')) {
+        function getTransactionType(Product $product){
+                
+                $searchKey = $product->propertyProps->transaction_type;                                     
+                return $searchKey==="resale"? "Resale" : "New Property";
+        }
+    }
+
+
+    if (! function_exists('getTotalFloors')) {
+        function getTotalFloors(Product $product, $key)
+            {
+                $prop_label = '';
+                $getTotalFloorsOptions =  PropertyProps::getTotalFloorsOptions();
+                $searchKey = $key;
+                $targetColumn = 'name';
+                $index = array_search($searchKey, array_column($getTotalFloorsOptions, 'id'));
+                if ($index !== false) {
+                    $prop_label = $getTotalFloorsOptions[$index][$targetColumn];
+                }
+                // $super_builtup_area =($product->propertyProps->super_builtup_area)? $product->propertyProps->super_builtup_area .' '. $prop_label  : '';
+                                                        
+                return $prop_label;
+            }
+    }
 }

@@ -2,10 +2,11 @@
 
 
 return [
-    'title'       => 'BuySellGhar Admin Panel',
-    'keywords'    => 'BuySellGhar, Innovation, Open Source, E-commerce, Flexible, Powerful',
-    'description' => 'BuySellGhar - An Innovative Open Source E-commerce System',
-    'login_index' => 'BuySellGhar Admin Login',
+    'title'       => 'BuySellGhar Seller Panel',
+    'keywords'    => 'BuySellGhar, Real Estate, Property List',
+    'description' => 'BuySellGhar, Real Estate, Property List',
+    'login_index' => 'Login',
     'email'       => 'Email',
     'password'    => 'Password',
+    'register'      =>"Register"
 ];

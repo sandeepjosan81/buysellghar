@@ -23,8 +23,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('order_payments', function (Blueprint $table) {
-            //
-            $table->string('gateway_payment_id')->nullable()->after('order_id'); 
+            //           
+            $table->dropColumn('gateway_payment_id');
         });
     }
 };

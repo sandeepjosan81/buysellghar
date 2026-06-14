@@ -1,4 +1,5 @@
 <div class="d-flex align-items-center gap-2 flex-wrap">
+  @if (!auth()->user()->hasAnyRole(['Seller'])) 
   <div class="btn-group me-2">
     <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
             :disabled="checkedIds.length === 0">
@@ -21,6 +22,7 @@
         <i class="bi bi-eye-slash me-2"></i>{{ __('panel/product.unpublish') }}</a></li>
     </ul>
   </div>
+  @endif
   <button class="btn btn-sm btn-outline-danger" @click="deleteAll" :disabled="checkedIds.length === 0">
     <i class="bi bi-trash"></i> 
     <span class="d-sm-inline">{{ __('panel/common.delete') }}</span>

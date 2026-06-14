@@ -7,6 +7,6 @@ return [
     'news_classification' => 'News classification',
     'news_tag'            => 'News tag',
     'related_articles'    => 'Related Articles',
-    'related_products'    => 'Related Products',
+    'related_products'    => 'Related Properties',
     'search'              => 'Search',
 ];

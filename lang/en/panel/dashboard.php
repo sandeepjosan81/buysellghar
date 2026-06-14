@@ -3,7 +3,7 @@
 
 return [
     'order_quantity'    => 'Orders',
-    'product_quantity'  => 'Products',
+    'product_quantity'  => 'Properties',
     'customer_quantity' => 'Customers',
     'order_amount'      => 'Order Amount',
     'order_quantity'    => 'Order Quantity',

@@ -56,26 +56,25 @@
                   @endforeach
                 </select>
               </div>
-              <div class="order-item">
+              <!-- <div class="order-item">
                 <label href="javascript:void(0)"
                        class="order-icon {{ !request('style_list') || request('style_list') == 'grid' ? 'active' : ''}}">
                   <i class="bi bi-grid"></i>
                   <input class="d-none" value="grid" type="radio" name="style_list">
                 </label>
-
                 <label href="javascript:void(0)"
                        class="order-icon {{ request('style_list') && request('style_list') == 'list' ? 'active' : ''}}">
                   <i class="bi bi-list"></i>
                   <input class="d-none" value="list" type="radio" name="style_list">
                 </label>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
 
         <div class="row gx-3 gx-lg-3 mb-3 {{ request('style_list') == 'list' ? 'product-list-wrap' : ''}}">
           @foreach ($products as $product)
-            <div class="{{ !request('style_list') || request('style_list') == 'grid' ? 'col-6 col-md-3 mb-3' : 'col-12'}}">
+            <div class="{{ !request('style_list') || request('style_list') == 'grid' ? 'col-12 col-md-3 mb-3' : 'col-12'}}">
               @include('shared.product')
             </div>
           @endforeach

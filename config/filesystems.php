@@ -57,6 +57,13 @@ return [
         ],
 
     ],
+    
+    'media' => [
+    'driver' => 'local',
+    'root' => public_path('static/media'),
+    'url' => env('APP_URL') . '/static/media',
+    'visibility' => 'public',
+    ],
 
     /*
     |--------------------------------------------------------------------------

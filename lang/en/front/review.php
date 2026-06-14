@@ -2,7 +2,7 @@
 
 
 return [
-    'product'        => 'product',
+    'product'        => 'Property',
     'review'         => 'Review',
     'review_content' => 'Rveiew Content',
     'rating'         => 'Rating',

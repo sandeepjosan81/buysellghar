@@ -28,7 +28,7 @@
       </div>
 
       <div class="btn-submit">
-        <button type="button" class="btn btn-primary form-submit btn-lg">{{ __('front/register.register_submit') }}</button>
+        <button type="button" class="btn btn-primary-btn fw-semibold custom-login btn-lg">{{ __('front/register.register_submit') }}</button>
         <a href="{{ front_route('login.index') }}{{ request('iframe') ? '?iframe=true' : '' }}">{{ __('front/register.have_account') }} <i class="bi bi-arrow-up-right-square"></i></a>
       </div>
 

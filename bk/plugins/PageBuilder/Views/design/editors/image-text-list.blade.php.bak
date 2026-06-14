@@ -1,0 +1,323 @@
+{{-- Image Text List Editor Module --}}
+<template id="module-editor-image-text-list-template">
+  <div class="image-text-list-editor">
+    <div class="top-spacing"></div>
+
+    <!-- Module Width -->
+    <div class="editor-section">
+      <div class="section-title">Module Width</div>
+      <div class="section-content">
+        <div class="segmented-buttons">
+          <div :class="['segmented-btn', { active: module.width === 'narrow' }]" @click="setModuleWidth('narrow')">Narrow</div>
+          <div :class="['segmented-btn', { active: module.width === 'wide' }]" @click="setModuleWidth('wide')">Wide</div>
+          <div :class="['segmented-btn', { active: module.width === 'full' }]" @click="setModuleWidth('full')">Full Width</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Module Title -->
+    <div class="editor-section">
+      <div class="section-title">Module Title</div>
+      <div class="section-content">
+        <text-i18n v-model="module.title" placeholder="Enter module title"></text-i18n>
+      </div>
+    </div>
+
+    <!-- Display Settings -->
+    <div class="editor-section">
+      <div class="section-title">Display Settings</div>
+
+      <div class="setting-group">
+        <div class="setting-label">Items Per Row</div>
+        <div class="segmented-buttons">
+          <div :class="{ active: module.columns === 3 }" @click="setColumns(3)">3</div>
+          <div :class="{ active: module.columns === 4 }" @click="setColumns(4)">4</div>
+          <div :class="{ active: module.columns === 5 }" @click="setColumns(5)">5</div>
+          <div :class="{ active: module.columns === 6 }" @click="setColumns(6)">6</div>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <div class="setting-label">Autoplay</div>
+        <el-switch v-model="module.autoplay" active-text="Enable" inactive-text="Disable"></el-switch>
+      </div>
+
+      <div class="setting-group" v-if="module.autoplay">
+        <div class="setting-label">Autoplay Interval</div>
+        <el-input-number v-model="module.autoplaySpeed" :min="1000" :max="10000"></el-input-number>
+      </div>
+
+      <div class="setting-group">
+        <div class="setting-label">Show Title</div>
+        <el-switch v-model="module.showNames" active-text="Show" inactive-text="Hide"></el-switch>
+      </div>
+    </div>
+
+    <!-- Item Management -->
+    <div class="editor-section">
+      <div class="section-title">Item Management</div>
+
+      <div v-if="module.imageTextItems.length">
+        <div v-for="(item, index) in module.imageTextItems" :key="index" class="item-row">
+          <span>{{ item.name }}</span>
+          <el-button size="mini" @click="editItem(index)">Edit</el-button>
+          <el-button size="mini" type="danger" @click="removeItem(index)">Delete</el-button>
+        </div>
+      </div>
+
+      <div v-else class="empty-state">
+        <p>No data available</p>
+        <span>Click below to add item</span>
+      </div>
+
+      <el-button type="primary" @click="addItem">Add Item</el-button>
+    </div>
+
+    <!-- Dialog -->
+    <el-dialog :title="editingItemIndex === -1 ? 'Add Item' : 'Edit Item'" :visible.sync="showItemDialog">
+
+      <div class="form-group">
+        <label>Title</label>
+        <el-input v-model="editingItem.name" placeholder="Enter title"></el-input>
+      </div>
+
+      <div class="form-group">
+        <label>Image</label>
+      </div>
+
+      <div slot="footer">
+        <el-button @click="closeItemDialog">Cancel</el-button>
+        <el-button type="primary" @click="saveItem">Confirm</el-button>
+      </div>
+
+    </el-dialog>
+
+  </div>
+</template>
+
+
+{{-- 图文列表编辑模块脚本 --}}
+<script type="text/javascript">
+  Vue.component('module-editor-image-text-list', {
+    template: '#module-editor-image-text-list-template',
+    props: ['module'],
+    
+    data: function() {
+      return {
+        debounceTimer: null,
+        loading: false,
+        showItemDialog: false,
+        editingItemIndex: -1,
+        editingItem: {
+          name: '',
+          image: '',
+          link: {
+            type: 'url',
+            value: ''
+          }
+        },
+        source: {
+          locale: $locale
+        }
+      }
+    },
+
+    watch: {
+      module: {
+        handler: function(val) {
+          this.onChange();
+        },
+        deep: true,
+      }
+    },
+
+    created: function() {
+      // 初始化默认值
+        if (!this.module.title) {
+          this.$set(this.module, 'title', this.languagesFill('图文列表'));
+        }
+      if (!this.module.imageTextItems) {
+        this.$set(this.module, 'imageTextItems', []);
+      }
+      if (!this.module.columns) {
+        this.$set(this.module, 'columns', 4);
+      }
+      if (!this.module.autoplay) {
+        this.$set(this.module, 'autoplay', false);
+      }
+      if (!this.module.autoplaySpeed) {
+        this.$set(this.module, 'autoplaySpeed', 3000);
+      }
+      if (!this.module.showNames) {
+        this.$set(this.module, 'showNames', true);
+      }
+      if (!this.module.width) {
+        this.$set(this.module, 'width', 'wide');
+      }
+      if (!this.module.itemHeight) {
+        this.$set(this.module, 'itemHeight', 120);
+      }
+      if (!this.module.padding) {
+        this.$set(this.module, 'padding', 16);
+      }
+      if (!this.module.borderRadius) {
+        this.$set(this.module, 'borderRadius', 8);
+      }
+      if (!this.module.borderWidth) {
+        this.$set(this.module, 'borderWidth', 1);
+      }
+      if (!this.module.borderColor) {
+        this.$set(this.module, 'borderColor', '#f0f0f0');
+      }
+      if (!this.module.borderStyle) {
+        this.$set(this.module, 'borderStyle', 'solid');
+      }
+    },
+
+    methods: {
+      onChange() {
+        // 清除之前的定时器
+        if (this.debounceTimer) {
+          clearTimeout(this.debounceTimer);
+        }
+        
+        // 设置新的定时器
+        this.debounceTimer = setTimeout(() => {
+          this.$emit('on-changed', this.module);
+        }, 300);
+      },
+
+      setModuleWidth(width) {
+        this.$set(this.module, 'width', width);
+        this.onChange();
+      },
+
+      setColumns(columns) {
+        this.$set(this.module, 'columns', columns);
+        this.onChange();
+      },
+
+      getImageUrl(image) {
+        if (!image) {
+          return PLACEHOLDER_IMAGE;
+        }
+        if (typeof image === 'string' && image.indexOf('http') === 0) {
+          return image;
+        }
+        if (typeof image === 'object') {
+          const locale = this.source.locale;
+          return image[locale] || (Object.values(image)[0] || PLACEHOLDER_IMAGE);
+        }
+        return asset + image;
+      },
+
+      addItem() {
+        this.editingItemIndex = -1;
+        this.editingItem = {
+          name: '',
+          image: '',
+          link: {
+            type: 'url',
+            value: ''
+          }
+        };
+        this.showItemDialog = true;
+      },
+
+      editItem(index) {
+        this.editingItemIndex = index;
+        this.editingItem = JSON.parse(JSON.stringify(this.module.imageTextItems[index]));
+        this.showItemDialog = true;
+      },
+
+      removeItem(index) {
+        this.$confirm('确定要删除这个图文项吗？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.module.imageTextItems.splice(index, 1);
+          this.onChange();
+          this.$message.success('Delete successfully');
+        }).catch(() => {
+          // 用户取消删除
+        });
+      },
+
+      saveItem() {
+        if (!this.editingItem.name.trim()) {
+          this.$message.error('Please enter title');
+          return;
+        }
+        if (!this.editingItem.image) {
+          this.$message.error('Added successfully');
+          return;
+        }
+
+        if (this.editingItemIndex === -1) {
+          // 添加新图文项
+          this.module.imageTextItems.push(JSON.parse(JSON.stringify(this.editingItem)));
+        } else {
+          // 编辑现有图文项
+          this.$set(this.module.imageTextItems, this.editingItemIndex, JSON.parse(JSON.stringify(this.editingItem)));
+        }
+
+        this.onChange();
+        this.closeItemDialog();
+        this.$message.success(this.editingItemIndex === -1 ? '添加成功' : '更新成功');
+      },
+
+      closeItemDialog() {
+        this.showItemDialog = false;
+        this.editingItemIndex = -1;
+        this.editingItem = {
+          name: '',
+          image: '',
+          link: {
+            type: 'url',
+            value: ''
+          }
+        };
+      },
+
+      languagesFill(text) {
+        const obj = {};
+        $languages.forEach(e => {
+          obj[e.code] = text;
+        });
+        return obj;
+      },
+
+      getLinkDisplayText(link) {
+        if (!link || !link.type) {
+          return '';
+        }
+
+        switch (link.type) {
+          case 'custom':
+            return link.value || '自定义链接';
+          case 'static':
+            const staticLinks = {
+              'account.index': '个人中心',
+              'account.wishlist.index': '我的收藏',
+              'account.order.index': '我的订单',
+              'brands.index': '品牌列表'
+            };
+            return staticLinks[link.value] || link.value;
+          case 'product':
+            return link.value ? `商品 #${link.value}` : '商品链接';
+          case 'category':
+            return link.value ? `分类 #${link.value}` : '商品分类';
+          case 'page':
+            return link.value ? `页面 #${link.value}` : '页面链接';
+          case 'catalog':
+            return link.value ? `文章分类 #${link.value}` : '文章分类';
+          case 'brand':
+            return link.value ? `品牌 #${link.value}` : '品牌链接';
+          default:
+            return link.value || '未知链接';
+        }
+      }
+    }
+  });
+</script> 

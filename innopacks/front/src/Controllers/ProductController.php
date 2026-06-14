@@ -26,7 +26,10 @@ class ProductController extends Controller
      */
     public function index(Request $request): mixed
     {
-        
+        $rData = $request->all();
+        // echo "<pre>";
+        // print_r($request->all());
+        // exit;
         // Use RequestFilterParser to extract filter conditions
         $filterParser = new \InnoShop\Common\Services\RequestFilterParser;
         $filters      = $filterParser->extractFilters($request, [
@@ -39,10 +42,18 @@ class ProductController extends Controller
             'brand_ids',
             'attribute_values',
             'in_stock',
+            'city',
+            'list_type',
+            'property_for',
+            'city',
+            'budget_min',
+            'budget_max',
+            'bedrooms',
+            'possession_status'
         ]);
 
         // Get product list
-        $products = ProductRepo::getInstance()->getFrontList($filters);
+        $products = ProductRepo::getInstance()->getFrontList($filters,$rData);        
 
         // Use Trait method to get filter sidebar data
         $filterData = $this->getFilterSidebarData($request);
@@ -53,6 +64,9 @@ class ProductController extends Controller
             'per_page_items' => CategoryRepo::getInstance()->getPerPageItems(),
         ];
 
+        // echo "<pre>";
+        // print_r($products);
+        // exit;
         // Merge filter data
         $data = array_merge($data, $filterData);
 

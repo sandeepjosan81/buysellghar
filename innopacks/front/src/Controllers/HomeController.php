@@ -7,7 +7,9 @@ use App\Http\Controllers\Controller;
 use InnoShop\Common\Repositories\ArticleRepo;
 use InnoShop\Common\Repositories\CategoryRepo;
 use InnoShop\Common\Repositories\ProductRepo;
+use InnoShop\Common\Models\Product\PropertyProps;
 use InnoShop\Front\Repositories\HomeRepo;
+use Detection\MobileDetect;
 
 class HomeController extends Controller
 {
@@ -17,14 +19,21 @@ class HomeController extends Controller
      */
     public function index(): mixed
     {
-        // echo "Testing "; exit;
-        $todayDealProducts = ProductRepo::getInstance()->getTodayDealProducts(3);
-        $hotDealProducts   = ProductRepo::getInstance()->getHotDealProducts();
-        $featuredProducts  = ProductRepo::getInstance()->getFeaturedProducts();
+        $detect = new MobileDetect();
+        $isMobile = $detect->isMobile();
+        $isTablet = $detect->isTablet();
+        
+        $todayDealProducts  = ProductRepo::getInstance()->getTodayDealProducts(3);
+        // $hotDealProducts    = ProductRepo::getInstance()->getHotDealProducts();
+        $featuredProducts   = ProductRepo::getInstance()->getFeaturedProducts();
 
         // $bestSeller  = ProductRepo::getInstance()->getBestSellerProducts();
-        $newArrivals = ProductRepo::getInstance()->getLatestProducts();
-        $popularProducts = ProductRepo::getInstance()->getPopularProducts(4);
+        // $newArrivals        = ProductRepo::getInstance()->getLatestProducts();
+        $propertyForSale        = ProductRepo::getInstance()->getPropertyForSale();
+        $propertyForRent        = ProductRepo::getInstance()->getPropertyForRent();
+        
+        
+        $popularProducts    = ProductRepo::getInstance()->getPopularProducts(4);
         $tabProducts = [
             // ['tab_title' => trans('front/home.bestseller'), 'products' => $bestSeller],
             ['tab_title' => trans('front/home.new_arrival'), 'products' => $featuredProducts],
@@ -32,7 +41,7 @@ class HomeController extends Controller
         
         $activeCategories = CategoryRepo::getInstance()->getActiveCategories(6);
         // echo "<pre>";
-        // print_r($activeCategories);
+        // print_r($propertyForSale);
         // exit;
 
         $news = ArticleRepo::getInstance()->getLatestArticles();
@@ -43,10 +52,14 @@ class HomeController extends Controller
             'hot_products'    => $this->getHotProducts(),
             'home_categories' => HomeRepo::getInstance()->getHomeCategories(),
             'today_deal_products' => $todayDealProducts,
-            'hot_deal_products' => $hotDealProducts,
-            'new_arrival_products' => $newArrivals,
-            'active_categories' => $activeCategories,
+            // 'hot_deal_products' => $hotDealProducts,
+            'propertyForSale' => $propertyForSale,
+            'propertyForRent' => $propertyForRent,
+            // 'active_categories' => $activeCategories,
             'popularProducts'=> $popularProducts,
+            'isMobile'=> $isMobile,
+            'isTablet'=> $isTablet,
+            'getAreaTypeOptions'=> PropertyProps::getAreaTypeOptions()
         ];
         
         // echo "<pre>";

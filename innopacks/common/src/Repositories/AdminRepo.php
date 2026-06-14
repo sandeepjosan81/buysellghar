@@ -17,6 +17,7 @@ class AdminRepo extends BaseRepo
             ['name' => 'name', 'type' => 'input', 'label' => trans('panel/admin.name')],
             ['name' => 'email', 'type' => 'input', 'label' => trans('panel/admin.email')],
             ['name' => 'locale', 'type' => 'input', 'label' => trans('panel/admin.locale')],
+            ['name' => 'whatsapp_no', 'type' => 'input', 'label' => trans('panel/admin.whatsapp_no')],
         ];
     }
 
@@ -29,6 +30,9 @@ class AdminRepo extends BaseRepo
     {
         $email = $data['email'] ?? '';
         $data  = $this->handleData($data);
+        // echo "<pre>";
+        // print_r($data);
+        // exit;
         $user  = Admin::query()->where('email', $email)->first();
         if (empty($user)) {
             $user = new Admin;

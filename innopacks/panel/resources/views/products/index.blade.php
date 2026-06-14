@@ -10,7 +10,6 @@
 @section('content')
   <div class="card h-min-600" id="app">
     <div class="card-body">
-
       <x-panel-data-criteria :criteria="$criteria ?? []" :action="panel_route('products.index')"/>
 
       <div class="mb-3 p-3 bg-light rounded border" id="products-toolbar">
@@ -34,11 +33,15 @@
               <th class="wp-100">{{ __('panel/common.image') }}</th>
               <th>{{ __('panel/common.name') }}</th>
               <th>{{ __('panel/product.price') }}</th>
-              <th>{{ __('panel/product.quantity') }}</th>              
-              <th>{{ __('panel/common.active') }}</th>
-              <th>{{ __('panel/common.is_today_deal') }}</th>
-              <th>{{ __('panel/common.is_hot_deal') }}</th>
-              <th>{{ __('panel/common.is_featured') }}</th>
+              <!-- <th>{{ __('panel/product.quantity') }}</th> -->
+              <th>{{ __('panel/common.viewed') }}</th>
+              <th>{{ __('panel/common.active') }}</th>                   
+              @if (!auth()->user()->hasAnyRole(['Seller'])) 
+                  <th>{{ __('panel/common.is_today_deal') }}</th>
+                  <th>{{ __('panel/common.is_hot_deal') }}</th>
+                  <th>{{ __('panel/common.is_featured') }}</th>
+              @endif
+              
               @hookinsert('panel.product.list.table.header.after')
               <th>{{ __('panel/common.actions') }}</th>
               <th>{{ __('panel/common.created_and_updated') }}</th>
@@ -67,13 +70,22 @@
                     &nbsp;<span class="text-bg-success px-1">M</span>
                   @endif
                 </td>
-                <td>{{ currency_format($product->masterSku->price ?? 0) }}</td>
-                <td>{{ $product->totalQuantity() }}</td>
-                
-                <td>@include('panel::shared.list_switch', ['value' => $product->active, 'url' =>panel_route('products.active', $product->id)])</td>
+                <td>{{ currency_format($product->propertyProps->price ?? 0) }} {{ $product->propertyProps->price_type }}</td>
+                <!-- <td>{{ $product->totalQuantity() }}</td> -->
+                <td>{{ $product->viewed }}</td>
+                @if (!auth()->user()->hasAnyRole(['Seller']))     
+                  <td>@include('panel::shared.list_switch', ['value' => $product->active, 'url' =>panel_route('products.active', $product->id)])</td>
+                @elseif(auth()->user()->hasRole('Seller') && $product->active == 0)
+                  <td><span class="badge bg-secondary">{{ __('panel/common.inactive') }}</span></td>
+                @else
+                  <td><span class="badge bg-success">{{ __('panel/common.active') }}</span></td>
+                @endif
+              
+                @if (!auth()->user()->hasAnyRole(['Seller'])) 
                 <td>@include('panel::shared.list_switch', ['value' => $product->is_today_deal, 'url' =>panel_route('products.is_today_deal', $product->id)])</td>
                 <td>@include('panel::shared.list_switch', ['value' => $product->is_hot_deal, 'url' =>panel_route('products.is_hot_deal', $product->id)])</td>
                 <td>@include('panel::shared.list_switch', ['value' => $product->is_featured, 'url' =>panel_route('products.is_featured', $product->id)])</td>
+                @endif
                 @hookinsert('panel.product.list.table.row.after', $product)
                 <td>
                   <div class="d-flex gap-2">

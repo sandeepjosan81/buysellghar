@@ -9,6 +9,14 @@
   </div>
 
   <ul class="account-links">
+    
+
+    <li class="{{ equal_account_route_name('favorites.index') ? 'active' : '' }}">
+      <a href="{{ account_route('favorites.index') }}"><i class="bi bi-heart"></i>{{ front_trans('account.favorites') }}
+      </a>
+    </li>
+    @hookinsert('front.account.sidebar.favorites.after')
+    <?php /*
     <li class="{{ equal_account_route_name('index') ? 'active' : '' }}">
       <a href="{{ account_route('index') }}"><i class="bi bi-person"></i>{{ front_trans('account.account') }}</a>
     </li>
@@ -19,13 +27,6 @@
             class="bi bi-clipboard2-check"></i>{{ front_trans('account.orders') }}</a>
     </li>
     @hookinsert('front.account.sidebar.orders.after')
-
-    <li class="{{ equal_account_route_name('favorites.index') ? 'active' : '' }}">
-      <a href="{{ account_route('favorites.index') }}"><i class="bi bi-heart"></i>{{ front_trans('account.favorites') }}
-      </a>
-    </li>
-    @hookinsert('front.account.sidebar.favorites.after')
-    
     <li class="{{ equal_account_route_name(['wallet.index', 'wallet.transactions.index', 'wallet.withdrawals.index', 'wallet.withdrawals.create', 'wallet.withdrawals.show']) ? 'active' : '' }}">
       <a href="{{ account_route('wallet.index') }}"><i class="bi bi-wallet"></i>{{ front_trans('account.wallet') }}
       </a>
@@ -50,6 +51,7 @@
     </li>
     @hookinsert('front.account.sidebar.order_returns.after')
 
+   */ ?>
     <li class="{{ equal_account_route_name('edit.index') ? 'active' : '' }}">
       <a href="{{ account_route('edit.index') }}"><i class="bi bi-pen"></i>{{ front_trans('account.edit') }}</a>
     </li>

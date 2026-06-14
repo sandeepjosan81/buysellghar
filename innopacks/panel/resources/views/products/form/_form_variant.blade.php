@@ -751,16 +751,17 @@
       // Validate form before submission
       const validateForm = () => {
         // Check single SKU form
-        const singleSkuPrice = $('input[name="skus[0][price]"]').val();
-        const singleSkuQuantity = $('input[name="skus[0][quantity]"]').val();
+        // const singleSkuPrice = $('input[name="skus[0][price]"]').val();
+        // const singleSkuQuantity = $('input[name="skus[0][quantity]"]').val();
 
-        // Check multi-variant SKUs
-        const hasValidVariants = variants.value.length > 0 && skus.value.some(sku => {
-          return sku.price && sku.quantity && (sku.is_default === 1);
-        });
+        // // Check multi-variant SKUs
+        // const hasValidVariants = variants.value.length > 0 && skus.value.some(sku => {
+        //   return sku.price && sku.quantity && (sku.is_default === 1);
+        // });
 
-        // Ensure at least one complete SKU exists
-        return hasValidVariants || (singleSkuPrice && singleSkuQuantity);
+        // // Ensure at least one complete SKU exists
+        // return hasValidVariants || (singleSkuPrice && singleSkuQuantity);
+        return true;
       }
 
       // Batch data validation methods

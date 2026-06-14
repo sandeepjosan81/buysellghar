@@ -2,7 +2,6 @@
      tabindex="3">
   <div class="row">
     <div class="col-12 col-md-6" id="product-category">
-      {{-- 分类选择 --}}
       <x-panel::form.row title="{{ __('panel/product.category') }}">
         <div class="category-select">
           <el-cascader
@@ -105,13 +104,10 @@
 
 
     computed: {
-      // 格式化已选分类显示
       categoryFormat() {
         const categories = JSON.parse(JSON.stringify(this.source.categories));
         const categoryIds = this.form.categories;
         const categoryFormat = [];
-
-        // 递归查找分类并构建完整路径
         const findCategoryWithPath = (cats, id, parentPath = []) => {
           for (let cat of cats) {
             const currentPath = [...parentPath, cat.label];
@@ -142,12 +138,9 @@
     },
 
     methods: {
-      // 分类选择变化处理
       categoriesChange(e) {
         console.log('Category changed:', e);
         const last = e[e.length - 1];
-
-        // 检查是否已经选择过该分类
         if (last && this.form.categories.includes(last)) {
           this.$message.warning('This category has already been selected.');
           return;
@@ -157,8 +150,6 @@
           this.form.categories.push(last);
         }
       },
-
-      // 移除分类
       removeCategory(index) {
         this.form.categories.splice(index, 1);
       },

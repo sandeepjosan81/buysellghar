@@ -5,8 +5,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <base href="{{ panel_route('home.index') }}">
-  <title>@yield('title'){{ View::hasSection('title') ? ' - ' : '' }}InnoShop</title>
-  <meta name="keywords" content="@yield('keywords', 'InnoShop, 创新, 开源, CMS, Laravel 11, 多语言, 多货币, Hook, 插件架构, 灵活, 强大')">
+  <title>@yield('title'){{ View::hasSection('title') ? ' - ' : '' }}BuySellGhar</title>
+  <meta name="keywords" content="@yield('keywords', 'BuySellGhar')">
   <meta name="generator" content="InnoShop {{ innoshop_version() }}">
   <meta name="asset" content="{{ asset('/') }}">
   <meta name="description" content="@yield('description', 'InnoShop')">
@@ -15,6 +15,7 @@
   <link rel="shortcut icon" href="{{ image_origin(system_setting('favicon', 'images/favicon.png')) }}">
   <link rel="stylesheet" href="{{ asset('vendor/element-plus/index.css') }}">
   <link rel="stylesheet" href="{{ mix('build/panel/css/bootstrap.css') }}">
+
   <link rel="stylesheet" href="{{ mix('build/panel/css/app.css') }}">
   <script src="{{ asset('vendor/jquery/jquery-3.7.1.min.js') }}"></script>
   <script src="{{ asset('vendor/vue/3.5/vue.global' . (config('app.debug') ? '' : '.prod') . '.js') }}"></script>
@@ -81,9 +82,8 @@
           @yield('page-bottom-btns')
         </div>
 
-        <p class="text-center text-secondary mt-5">
-          {!! innoshop_brand_link() !!}
-          {{ innoshop_version() }} &copy; {{ date('Y') }} All Rights Reserved
+        <p class="text-center text-secondary mt-5">          
+          {{ config('app.name') }}&copy; {{ date('Y') }} All Rights Reserved
         </p>
       </div>
     </div>

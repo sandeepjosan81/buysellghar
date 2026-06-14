@@ -1,5 +1,4 @@
-<div class="tab-pane fade mt-4" id="translation-tab-pane" role="tabpanel"
-     aria-labelledby="translation-tab" tabindex="1">
+
   <div class="mb-1 fs-6">{{ __('panel/product.content') }}</div>
   @if(has_translator())
     <div
@@ -44,13 +43,10 @@
     </ul>
   </div>
 
-  <div class="tab-content pt-1" id="myTabContent">
     @foreach (locales() as $locale)
       @php($localeCode = $locale->code)
       @php($localeName = $locale->name)
-      <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}"
-           id="{{ $localeCode }}-tab-pane" role="tabpanel" aria-labelledby="{{ $localeCode }}-tab"
-           tabindex="0">
+
         <div class="mb-3">
           <input type="hidden" name="translations[{{ $localeCode }}][locale]"
                  value="{{ $localeCode }}">
@@ -60,7 +56,4 @@
                                    required placeholder="{{ __('panel/product.describe') }}"
                                    data-locale="{{ $localeCode }}"/>
         </div>
-      </div>
     @endforeach
-  </div>
-</div>

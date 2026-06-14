@@ -6,6 +6,8 @@ use InnoShop\Panel\Controllers;
 
 Route::get('login', [Controllers\LoginController::class, 'index'])->name('login.index');
 Route::post('login', [Controllers\LoginController::class, 'store'])->name('login.store');
+Route::get('register', [Controllers\LoginController::class, 'register'])->name('login.register');
+Route::post('store-seller', [Controllers\LoginController::class, 'store_seller'])->name('login.store_seller');
 
 Route::middleware(['admin_auth:admin'])
     ->group(function () {

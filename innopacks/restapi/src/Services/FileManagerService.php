@@ -7,7 +7,8 @@ use Exception;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use InnoShop\Common\Services\FileSecurityValidator;
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 class FileManagerService implements FileManagerInterface
 {
     protected string $fileBasePath = '';
@@ -86,8 +87,17 @@ class FileManagerService implements FileManagerInterface
         }
 
         $currentBasePath = rtrim($this->fileBasePath.$baseFolder, '/');
+
+        if (Auth::check() && auth()->user()->hasAnyRole(['Seller'])){
+            $sellerFolder = 'seller-uploads/' . auth()->id();
+            $currentBasePath = rtrim($this->fileBasePath.'/'.$sellerFolder, '/');
+        }
+
         $folders         = $this->collectFolders($currentBasePath, $realBasePath);
-        $images          = $this->collectFiles($currentBasePath, $realBasePath, $keyword);
+        $images          = $this->collectFiles($currentBasePath, $realBasePath, $keyword);       
+
+        
+        // echo "<pre> folders: "; print_r($folders); echo "images: "; print_r($images); exit;
 
         $allItems = array_merge($folders, $images);
         $allItems = $this->sortItems($allItems, $sort, $order);
@@ -211,13 +221,18 @@ class FileManagerService implements FileManagerInterface
         try {
             $path     = FileSecurityValidator::validateDirectoryPath($path);
             $fullPath = $this->getFullPath($path);
-
+            
             Log::info('Deleting path:', [
                 'path'   => $fullPath,
                 'is_dir' => is_dir($fullPath),
             ]);
+            if (Auth::check() && auth()->user()->hasAnyRole(['Seller'])){
+                $sellerFolder = 'seller-uploads/' . auth()->id();
+                $fullPath = rtrim($this->fileBasePath.'/'.$sellerFolder, '/').'/'.basename($path);
 
-            if (is_dir($fullPath)) {
+            }
+
+            if (is_dir($fullPath)) {                
                 $this->deleteDirectory($fullPath);
             } elseif (file_exists($fullPath)) {
                 $this->deleteFile($fullPath);
@@ -242,28 +257,38 @@ class FileManagerService implements FileManagerInterface
      * @throws Exception If deletion fails or files are not found
      */
     public function deleteFiles(string $basePath, array $files): bool
-    {
-        try {
-            $this->validateFilesNotEmpty($files);
+{
+    try {
+        $this->validateFilesNotEmpty($files);
 
-            foreach ($files as $file) {
-                $filePath = $this->getFullPath("$basePath/$file");
+        foreach ($files as $file) {
 
-                Log::info('Deleting file:', ['path' => $filePath]);
+            // Default path
+            $relativePath = "$basePath/$file";
 
-                if (file_exists($filePath)) {
-                    $this->deleteFile($filePath);
-                } else {
-                    Log::warning('File not found:', ['path' => $filePath]);
-                }
+            // Seller uploads path
+            if (Auth::check() && auth()->user()->hasAnyRole(['Seller'])) {
+                $relativePath = "$basePath/seller-uploads/" . auth()->id() . "/$file";
             }
 
-            return true;
-        } catch (Exception $e) {
-            $this->logError('Delete files failed', $e, ['files' => $files]);
-            throw $e;
+            $filePath = $this->getFullPath($relativePath);
+
+            Log::info('Deleting file:', ['path' => $filePath]);
+
+            if (file_exists($filePath)) {
+                $this->deleteFile($filePath);
+            } else {
+                Log::warning('File not found:', ['path' => $filePath]);
+            }
         }
+
+        return true;
+
+    } catch (Exception $e) {
+        $this->logError('Delete files failed', $e, ['files' => $files]);
+        throw $e;
     }
+}
 
     /**
      * Renames a file or folder.
@@ -331,19 +356,85 @@ class FileManagerService implements FileManagerInterface
      * @param  string  $originName  Original filename
      * @return string URL to the uploaded file
      */
+    // public function uploadFile(UploadedFile $file, string $savePath, string $originName): string
+    // {
+    //     // Validate file security (包括文件名和扩展名安全性)
+    //     FileSecurityValidator::validateFile($originName);
+
+    //     // Validate save path security
+    //     $savePath = FileSecurityValidator::validateDirectoryPath($savePath);
+        
+    //     $originName = $this->getUniqueFileName($savePath, $originName);
+
+    //     if (Auth::check() && auth()->user()->hasAnyRole(['Seller'])){
+    //         $path = public_path($savePath.'seller_uploads/'.auth()->id());
+    //        if (!File::isDirectory($path)) {
+    //            File::makeDirectory($path, 0777, true, true);
+    //         }
+    //         $filePath   =  $file->storeAs($savePath, $originName, 'seller_uploads/'.auth()->id());
+    //     }else{
+    //          $filePath  = $file->storeAs($savePath, $originName, 'media');
+    //     }
+       
+
+    //     return asset($this->mediaDir.'/'.$filePath);
+    // }
+
     public function uploadFile(UploadedFile $file, string $savePath, string $originName): string
     {
-        // Validate file security (包括文件名和扩展名安全性)
-        FileSecurityValidator::validateFile($originName);
+            // Validate file security
+            FileSecurityValidator::validateFile($originName);
 
-        // Validate save path security
-        $savePath = FileSecurityValidator::validateDirectoryPath($savePath);
+            // Validate save path security
+            $savePath = FileSecurityValidator::validateDirectoryPath($savePath);
 
-        $originName = $this->getUniqueFileName($savePath, $originName);
-        $filePath   = $file->storeAs($savePath, $originName, 'media');
+            // Generate unique filename
+            $originName = $this->getUniqueFileName($savePath, $originName);
 
-        return asset($this->mediaDir.'/'.$filePath);
-    }
+            // Seller upload
+            if (Auth::check() && auth()->user()->hasAnyRole(['Seller'])) {
+
+                $sellerFolder = 'seller-uploads/' . auth()->id();
+
+                // Final relative path
+                $uploadPath = trim($savePath . '/' . $sellerFolder, '/');
+
+                // Create directory if not exists
+                $fullPath = public_path('static/media/' . $uploadPath);
+
+                if (!File::isDirectory($fullPath)) {
+                    File::makeDirectory($fullPath, 0777, true, true);
+                }
+
+                // Store file
+                $filePath = $file->storeAs(
+                    $uploadPath,
+                    $originName,
+                    'media'
+                );
+
+            } else {
+
+                // Normal upload path
+                $uploadPath = trim($savePath, '/');
+
+                // Create directory if not exists
+                $fullPath = public_path('static/media/' . $uploadPath);
+
+                if (!File::isDirectory($fullPath)) {
+                    File::makeDirectory($fullPath, 0777, true, true);
+                }
+
+                // Store file
+                $filePath = $file->storeAs(
+                    $uploadPath,
+                    $originName,
+                    'media'
+                );
+            }
+
+            return asset('static/media/' . $filePath);
+        }
 
     /**
      * Generates a unique file name to avoid conflicts.
@@ -952,6 +1043,7 @@ class FileManagerService implements FileManagerInterface
      */
     protected function deleteFile(string $filePath): void
     {
+        // echo $filePath; exit;
         if (! @unlink($filePath)) {
             Log::error('Failed to delete file:', [
                 'path'  => $filePath,

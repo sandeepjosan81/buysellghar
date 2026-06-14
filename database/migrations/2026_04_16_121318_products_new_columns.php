@@ -25,8 +25,8 @@ return new class extends Migration
     {
         Schema::table('products', function (Blueprint $table) {
             //
-            $table->boolean('is_today_deal')->nullable()->after('is_virtual'); 
-            $table->boolean('is_hot_deal')->nullable()->after('is_virtual');
+            $table->dropColumn('is_today_deal');
+            $table->dropColumn('is_hot_deal');
         });
     }
 };

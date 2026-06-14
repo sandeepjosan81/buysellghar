@@ -24,7 +24,7 @@ return new class extends Migration
     {
         Schema::table('products', function (Blueprint $table) {
             //
-            $table->boolean('is_featured')->nullable()->after('is_hot_deal'); 
+            $table->dropColumn('is_featured');
         });
     }
 };

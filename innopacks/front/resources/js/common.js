@@ -96,9 +96,9 @@ export default {
 
   // Get cart information
   getCarts() {
-    axios.get(urls.front_cart_mini).then((res) => {
-      $('.header-cart-icon .icon-quantity').text(res.data.total_format)
-    })
+    // axios.get(urls.front_cart_mini).then((res) => {
+    //   $('.header-cart-icon .icon-quantity').text(res.data.total_format)
+    // })
   },
 
   // Convert serialized string to object

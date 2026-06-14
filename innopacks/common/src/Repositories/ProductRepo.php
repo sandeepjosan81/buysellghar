@@ -16,6 +16,7 @@ use InnoShop\Common\Repositories\Product\OptionValueRepo;
 use InnoShop\Common\Repositories\Product\RelationRepo;
 use InnoShop\Common\Repositories\Product\VariantRepo;
 use Throwable;
+use Illuminate\Support\Facades\Auth;
 
 class ProductRepo extends BaseRepo
 {
@@ -120,13 +121,185 @@ class ProductRepo extends BaseRepo
      * @return LengthAwarePaginator
      * @throws Exception
      */
-    public function getFrontList(array $filters = []): LengthAwarePaginator
+    public function getFrontList(array $filters = [], $rData =[]): LengthAwarePaginator
     {
-        $builder = $this->withActive()->builder($filters);
-        $this->applySorting($builder, $filters);
-
+        $builder = $this->withActive()->builder($filters, );
+        $this->applyFrontSorting($builder, $filters,$rData);
+        // echo $builder->toRawSql();
         return $builder->paginate($filters['per_page'] ?? 15);
     }
+
+    /*
+    private function applyFrontSorting(Builder $builder, array $filters, $rData=[]): void
+    {
+        
+        $sort  = $filters['sort'] ?? 'created_at';
+        $order = $filters['order'] ?? 'desc';
+
+        if ($sort == 'pt.name') {
+            $builder->select(['products.*', 'pt.name', 'pt.content']);
+            $builder->join('product_translations as pt', function ($join) {
+                $join->on('products.id', '=', 'pt.product_id')
+                    ->where('pt.locale', locale_code());
+                if (Auth::check() && auth()->user()->hasAnyRole(['Seller'])){
+                    $join->where('admin_id', auth()->user()->id);                    
+                }    
+            });
+        } elseif ($sort == 'ps.price') {
+            $builder->select(['products.*', 'ps.price']);
+            $builder->join('product_skus as ps', function ($query) {
+                $query->on('ps.product_id', '=', 'products.id')
+                    ->where('is_default', true);
+                if (Auth::check() && auth()->user()->hasAnyRole(['Seller'])){
+                    $query->where('admin_id', auth()->user()->id);                    
+                }
+            });
+        }else{
+            if (Auth::check() && auth()->user()->hasAnyRole(['Seller'])){
+                $builder->where('admin_id', auth()->user()->id);  
+            }
+        }
+
+        $city               = $rData['city'] ?? "";
+        $list_type          = $rData['list_type'] ?? null;
+        $possession_status  = $rData['possession_status'] ?? null;
+        $property_for       = $rData['property_for'] ?? null;
+        $budget_min         = $rData['budget_min'] ?? null;
+        $budget_max         = $rData['budget_max'] ?? null;
+        $bedrooms           = $rData['bedrooms'] ?? null;
+
+        if (! in_array($sort, self::AVAILABLE_SORT_FIELDS)) {
+            $sort = 'created_at';
+        }
+
+        if (! in_array($order, ['asc', 'desc'])) {
+            $order = 'desc';
+        }
+
+        if ($sort && $order) {
+            $builder->orderBy($sort, $order);
+        }
+
+        if (!empty($city)) {            
+            $builder->select([
+                'products.*',
+                'property_props.city'
+            ]);
+            $builder->join(
+                'property_props',
+                'property_props.product_id',
+                '=',
+                'products.id'
+            );
+            $builder->where('property_props.city', 'LIKE', "%{$city}%");            
+        }      
+        
+    }
+    */
+    
+    private function applyFrontSorting(Builder $builder, array $filters, $rData = []): void
+    {
+        $sort  = $filters['sort'] ?? 'created_at';
+        $order = $filters['order'] ?? 'desc';
+
+        // Handle pt.name and ps.price joins for sorting
+        if ($sort == 'pt.name') {
+            $builder->select(['products.*', 'pt.name', 'pt.content']);
+            $builder->join('product_translations as pt', function ($join) {
+                $join->on('products.id', '=', 'pt.product_id')
+                    ->where('pt.locale', locale_code());
+                if (Auth::check() && auth()->user()->hasAnyRole(['Seller'])) {
+                    $join->where('admin_id', auth()->user()->id);
+                }
+            });
+        } elseif ($sort == 'ps.price') {
+            $builder->select(['products.*', 'property_props.price']);
+            $builder->join('property_props', function ($query) {
+                $query->on('property_props.product_id', '=', 'products.id');
+                if (Auth::check() && auth()->user()->hasAnyRole(['Seller'])) {
+                    $query->where('admin_id', auth()->user()->id);
+                }
+            });
+        } else {
+            $builder->select(['products.*', 'property_props.city', 'property_props.bedrooms','property_props.list_type', 'property_props.possession_status','property_props.property_for','property_props.price']);
+            $builder->join('property_props', function ($join) {
+                $join->on('products.id', '=', 'property_props.product_id');
+                if (Auth::check() && auth()->user()->hasAnyRole(['Seller'])) {
+                    $join->where('admin_id', auth()->user()->id);
+                }
+            });
+            if (Auth::check() && auth()->user()->hasAnyRole(['Seller'])) {
+                $builder->where('admin_id', auth()->user()->id);
+            }
+        }
+
+        // Extract filters from $rData
+        $city             = $rData['city'] ?? "";
+        $list_type        = $rData['list_type'] ?? null;
+        $possession_status = $rData['possession_status'] ?? null;
+        $property_for     = $rData['property_for'] ?? null;
+        $budget_min       = $rData['budget_min'] ?? null;
+        $budget_max       = $rData['budget_max'] ?? null;
+        $bedrooms         = $rData['bedrooms'] ?? null;
+
+        // Validate sort and order
+        // if (!in_array($sort, self::AVAILABLE_SORT_FIELDS)) {
+        //     $sort = 'created_at';
+        // }
+        
+        // if (!in_array($order, ['asc', 'desc'])) {
+        //     $order = 'desc';
+        // }
+
+        // // Apply sorting
+        // if ($sort && $order) {
+        //     $builder->orderBy($sort, $order);
+        // }
+
+        // Join property_props once for all property filters
+        // $hasPropertyPropsJoin = !empty($city) || !empty($list_type) || !empty($possession_status) 
+        //                     || !empty($property_for) || !empty($bedrooms) || !empty($budget_min) || !empty($budget_max);
+        
+        // Apply bedrooms filter
+        if (!empty($bedrooms)) {
+            $builder->where('property_props.bedrooms', $bedrooms);
+        }
+        // // Apply city filter
+        if (!empty($city)) {
+            $builder->where('property_props.city', 'LIKE', "%{$city}%");
+            $builder->orWhere('property_props.address', 'LIKE', "%{$city}%");
+            $builder->orWhere('property_props.location', 'LIKE', "%{$city}%");
+        }
+        
+        // // Apply list_type filter
+        if (!empty($list_type)) {            
+            $builder->where('property_props.list_type', $list_type);
+        }
+
+        
+        // Apply possession_status filter
+        if (!empty($possession_status)) {
+            $builder->where('property_props.possession_status', $possession_status);
+        }
+
+        // Apply property_for filter
+        if (!empty($property_for)) {
+            $builder->where('property_props.property_for', $property_for);
+        }
+
+        // Apply min and max price filter in ONE query condition
+        if (!empty($budget_min) || !empty($budget_max)) {
+            $builder->where(function ($query) use ($budget_min, $budget_max) {
+                if (!empty($budget_min)) {
+                    $query->where('property_props.price', '>=', $budget_min);
+                }
+                if (!empty($budget_max)) {
+                    $query->where('property_props.price', '<=', $budget_max);
+                }
+            });
+        }        
+    }
+
 
     /**
      * Apply sorting to the builder.
@@ -146,13 +319,23 @@ class ProductRepo extends BaseRepo
             $builder->join('product_translations as pt', function ($join) {
                 $join->on('products.id', '=', 'pt.product_id')
                     ->where('pt.locale', locale_code());
+                if (Auth::check() && auth()->user()->hasAnyRole(['Seller'])){
+                    $join->where('admin_id', auth()->user()->id);                    
+                }    
             });
         } elseif ($sort == 'ps.price') {
             $builder->select(['products.*', 'ps.price']);
             $builder->join('product_skus as ps', function ($query) {
                 $query->on('ps.product_id', '=', 'products.id')
                     ->where('is_default', true);
+                if (Auth::check() && auth()->user()->hasAnyRole(['Seller'])){
+                    $query->where('admin_id', auth()->user()->id);                    
+                }
             });
+        }else{          
+            if (Auth::check() && auth()->user()->hasAnyRole(['Seller'])){
+                $builder->where('admin_id', auth()->user()->id);  
+            }
         }
 
         if (! in_array($sort, self::AVAILABLE_SORT_FIELDS)) {
@@ -166,6 +349,8 @@ class ProductRepo extends BaseRepo
         if ($sort && $order) {
             $builder->orderBy($sort, $order);
         }
+     
+        
     }
 
     /**
@@ -451,10 +636,12 @@ class ProductRepo extends BaseRepo
     {
         $isUpdating = $product->id > 0;
         DB::beginTransaction();
-
+     
         try {
             if ($isUpdating) {
                 $data['type'] = $product->type;
+            }else{
+                $product->admin_id = auth()->user()->id;
             }
             $productData = $this->handleProductData($data);
             $product->fill($productData);
@@ -487,14 +674,34 @@ class ProductRepo extends BaseRepo
             }
 
             $skus = $this->handleSkus($data['skus'] ?? []);
+
+           
             if (isset($data['price_type']) && $data['price_type'] === 'single' && ! empty($skus)) {
                 $product->update(['variables' => []]);
                 $skus = [$skus[0]];
             }
             $product->skus()->createMany($skus);
-
+             
+            // Store the product properties for real estate
+            $propertyProps = $data['propertyProps'] ?? null;
+            $propertyProps['list_type']= $data['categories']['0'] ?? '';
+            // echo "<pre>";
+            // print_r($propertyProps);
+            // exit;
+            // 
+            if ($isUpdating) {
+                $product->propertyProps()->update(
+                    $propertyProps
+                );
+            }else{                
+                $product->propertyProps()->create($propertyProps);
+            }     
+            
             DB::commit();
-
+            
+            // echo "<pre>";
+            // print_r($propertyProps);
+            // exit;
             return $product;
         } catch (Exception $e) {
             DB::rollBack();
@@ -779,7 +986,10 @@ class ProductRepo extends BaseRepo
      */
     public function getLatestProducts(int $limit = 8): mixed
     {
-        return $this->withActive()->builder()
+
+        return $this->withActive()
+            ->builder()
+            ->with('propertyProps')
             ->orderByDesc('updated_at')
             ->limit($limit)
             ->get();
@@ -919,6 +1129,31 @@ class ProductRepo extends BaseRepo
         return $this->withActive()->builder()
             ->orderByDesc('viewed')
              ->with(['translation', 'masterSku',"reviews"])
+            ->limit($limit)
+            ->get();
+    }
+
+
+    public function getPropertyForSale(int $limit = 24): mixed{
+        return $this->withActive()
+            ->builder()
+            ->whereHas('propertyProps', function ($query) {
+                $query->where('property_for', 'sale');
+            })
+            ->with('propertyProps')
+            ->orderByDesc('updated_at')
+            ->limit($limit)
+            ->get();
+    }
+
+    public function getPropertyForRent(int $limit = 24): mixed{
+        return $this->withActive()
+            ->builder()
+            ->whereHas('propertyProps', function ($query) {
+                $query->where('property_for', 'rent');
+            })
+            ->with('propertyProps')
+            ->orderByDesc('updated_at')
             ->limit($limit)
             ->get();
     }

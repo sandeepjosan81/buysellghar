@@ -19,7 +19,7 @@ class LoginController extends Controller
     public function index(): mixed
     {
         if (current_customer()) {
-            return redirect(front_route('account.index'));
+            return redirect(front_route('favorites.index'));
         }
 
         return inno_view('account.login');

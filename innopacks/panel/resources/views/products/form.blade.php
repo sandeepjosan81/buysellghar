@@ -21,15 +21,25 @@
                   type="button" role="tab" aria-controls="basic-tab-pane"
                   aria-selected="true">{{ __('panel/product.basic_information') }}</button>
               </li>
+              @if (!auth()->user()->hasAnyRole(['Seller'])) 
+             <?php /* 
               <li class="nav-item" role="presentation" id="bundle-items-tab-nav" style="display:none;">
                 <button class="nav-link" id="bundle-items-tab" data-bs-toggle="tab" data-bs-target="#bundle-items-tab-pane"
                   type="button" role="tab" aria-controls="bundle-items-tab-pane"
                   aria-selected="false">{{ __('panel/product.bundle_items_tab') }}</button>
               </li>
-              <li class="nav-item" role="presentation">
+              
+              
+             
+             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="translation-tab" data-bs-toggle="tab" data-bs-target="#translation-tab-pane"
                   type="button" role="tab" aria-controls="translation-tab-pane"
                   aria-selected="false">{{ __('panel/product.product_description') }}</button>
+              </li>
+             <li class="nav-item" role="presentation">
+                <button class="nav-link" id="extra-tab" data-bs-toggle="tab" data-bs-target="#extra-tab-pane"
+                  type="button" role="tab" aria-controls="extra-tab-pane"
+                  aria-selected="false">{{ __('panel/product.extend_information') }}</button>
               </li>
               <li class="nav-item" role="presentation">
                 <button class="nav-link" id="specification-tab" data-bs-toggle="tab"
@@ -42,11 +52,8 @@
                   type="button" role="tab" aria-controls="options-tab-pane"
                   aria-selected="false">{{ __('panel/product.product_options') }}</button>
               </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" id="extra-tab" data-bs-toggle="tab" data-bs-target="#extra-tab-pane"
-                  type="button" role="tab" aria-controls="extra-tab-pane"
-                  aria-selected="false">{{ __('panel/product.extend_information') }}</button>
-              </li>
+              */?>
+              
               <li class="nav-item" role="presentation">
                 <button class="nav-link" id="seo-tab" data-bs-toggle="tab" data-bs-target="#seo-tab-pane" type="button"
                   role="tab" aria-controls="seo-tab-pane" aria-selected="false">{{ __('panel/product.seo') }}</button>
@@ -56,6 +63,8 @@
                   type="button" role="tab" aria-controls="relation-tab-pane"
                   aria-selected="false">{{ __('panel/product.related_products') }}</button>
               </li>
+              
+              @endif
               @hookinsert('panel.product.edit.tab.nav.bottom')
             </ul>
 
@@ -65,17 +74,19 @@
                 @include('panel::products.panes.tab_pane_bundle_items', $product)
               </div>
 
-              @include('panel::products.panes.tab_pane_content', $product)
-
+              <!-- @include('panel::products.panes.tab_pane_content', $product) -->
+            <?php /*
               @include('panel::products.panes.tab_pane_specification', $product)
 
               @include('panel::products.panes.tab_pane_options', $product)
 
               @include('panel::products.panes.tab_pane_extra', $product)
-
-              @include('panel::products.panes.tab_pane_seo', $product)
-
-              @include('panel::products.panes.tab_pane_related', $product)
+*/?>
+              @if (!auth()->user()->hasAnyRole(['Seller'])) 
+                  @include('panel::products.panes.tab_pane_seo', $product)
+                  @include('panel::products.panes.tab_pane_related', $product)
+              @endif
+            
 
               @hookinsert('panel.product.edit.tab.pane.bottom')
             </div>

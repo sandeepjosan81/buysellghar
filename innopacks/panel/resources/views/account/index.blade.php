@@ -14,6 +14,7 @@
           @csrf
           @method('put')
 
+          <x-common-form-input title="{{ __('panel/common.whatsapp_no') }}" name="whatsapp_no" value="{{ old('whatsapp_no', $admin->whatsapp_no) }}" required />
           <x-common-form-input title="{{ __('panel/common.name') }}" name="name" value="{{ old('name', $admin->name) }}" required />
           <x-common-form-input title="{{ __('panel/common.email') }}" name="email" value="{{ old('email', $admin->email) }}" required />
           <x-common-form-input title="{{ __('panel/common.password') }}" name="password" value="" type="password" />
@@ -25,7 +26,7 @@
     </div>
   </div>
 
-  <div class="col-md-6">
+  <!-- <div class="col-md-6">
     <div class="card h-min-600">
       <div class="card-header">
         <h5 class="card-title mb-0">{{ __('panel/account.share_link') }}</h5>
@@ -39,7 +40,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </div>
 @endsection
 

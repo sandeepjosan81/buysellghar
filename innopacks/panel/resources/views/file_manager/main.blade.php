@@ -878,7 +878,7 @@
     }
 
     .file-card[data-is-dir="true"]:hover::after {
-      content: "双击进入";
+      content: "Double click to enter";
       position: absolute;
       bottom: 5px;
       right: 5px;
@@ -1442,6 +1442,7 @@
 
   <el-row :gutter="0">
     <!-- Left folder tree -->
+    <?php /*
     <el-col :xs="8" :sm="6" :md="5" :lg="4" :xl="3">
       <div class="folder-tree">
         <el-tree
@@ -1486,6 +1487,7 @@
         </el-tree>
       </div>
     </el-col>
+    */ ?>
 
     <!-- Right file list -->
     <el-col :xs="16" :sm="18" :md="19" :lg="20" :xl="21">
@@ -2098,7 +2100,7 @@
               this.pagination.page = res.image_page;
             })
             .catch(err => {
-              this.$message.error('获取文件列表失败：' + err.message);
+              this.$message.error('Failed to retrieve file list：' + err.message);
             })
             .finally(() => {
               this.loading = false;

@@ -13,16 +13,18 @@
           <hr class="dropdown-divider mt-0 mb-2">
         </div>
       @else
-        <div class="accordion-item">
+        <div class="accordion-item-{{ $index }}">
           @if(!isset($menuLink['has_children']) || !$menuLink['has_children'])
-            @if(($menuLink['url'] ?? ''))
-              <a class="accordion-button {{ $menuLink['active'] ? '' : 'collapsed' }}" href="{{ $menuLink['url'] }}">
-                <span class="icon"><i
-                    class="bi {{ $menuLink['icon'] ?? 'bi-house' }}"></i></span> {{ $menuLink['title'] }}
-              </a>
+            @if (!auth()->user()->hasAnyRole(['Seller']))
+              @if(($menuLink['url'] ?? ''))
+                <a class="accordion-button {{ $menuLink['active'] ? '' : 'collapsed' }}" href="{{ $menuLink['url'] }}">
+                  <span class="icon"><i
+                      class="bi {{ $menuLink['icon'] ?? 'bi-house' }}"></i></span> {{ $menuLink['title'] }}
+                </a>
+              @endif
             @endif
           @else
-            <h2 class="accordion-header">
+            <h2 class="accordion-header class_{{ $menuLink['title'] }}">
               <button
                 class="accordion-button {{ $menuLink['active'] ? '' : (system_setting('expand') ? '' : 'collapsed') }}"
                 type="button"
@@ -40,8 +42,12 @@
               <div class="accordion-body p-0">
                 <ul class="nav flex-column">
                   @foreach($menuLink['children'] as $child)
+                  @php
+                  $childClass = str_replace(" ",'', $child['title']);
+
+                  @endphp
                       @if(!in_array($child['title'], ["Billing","Marketing","Order Fees","Language","Translation","Intelli","Social"])) 
-                      <li class="nav-item">
+                      <li class="nav-item sub_class_{{ $childClass }}">
                         <a href="{{ $child['url'] }}" @if($child['blank'] ?? false) target="_blank" @endif
                         class="nav-link {{ $child['active'] ? 'active' : '' }}">{{ $child['title'] }}</a>
                       </li>

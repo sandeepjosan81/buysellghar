@@ -1,0 +1,79 @@
+@extends('layouts.app')
+@section('body-class', 'page-wishlist')
+
+@section('content')
+<x-front-breadcrumb type="route" value="account.favorites.index" title="{{ __('front/account.favorites') }}" />
+
+@hookinsert('account.favorites.top')
+
+<div class="container">
+  <div class="row">
+    <div class="col-12 col-lg-3">
+      @include('shared.account-sidebar')
+    </div>
+    <div class="col-12 col-lg-9">
+      <div class="account-card-box wishlist-box">
+        <div class="account-card-title d-flex justify-content-between align-items-center">
+          <span class="fw-bold">{{ __('front/favorites.favorites') }}</span>
+        </div>
+
+        @if ($favorites->count())
+          <div class="row">
+            @foreach ($favorites as $product)
+              @php($product = $product->product)
+              <div class="col-6 col-md-3 col-lg-3 mb-3">
+                <div class="template-2">
+                  <article class="product-card ">
+                        <div class="product-grid-item1">
+                          <div class="image">
+                            <div class="cancel-favorite cursor-pointer" data-id="{{ $product->id }}" data-in-wishlist="1"><i class="bi bi-trash"></i></div>
+                            <a href="{{ $product->url }}" title="{{ $product->fallbackName() }}">
+                              <img src="{{ $product->image_url }}" class="img-fluid" alt="{{ $product->fallbackName() }}">
+                            </a>
+                          </div>
+                          <div class="product-bottom-btns">
+                            <div class="product-name"><a href="{{ $product->url }}"  title="{{ $product->fallbackName() }}"> {{ strlen($product->fallbackName()) > 30 ? substr($product->fallbackName(), 0, 30) . '' : $product->fallbackName() }}</a></div>
+                            <div class="product-bottom">
+                              <p class="price mb-2">
+                                    {{ $product->masterSku->getFinalPriceFormat() }}
+                                    @if ($product->masterSku->origin_price)
+                                    <span>{{ $product->masterSku->origin_price_format }}</span>
+                                    @endif
+                              </p>
+                              <div class="product-bottom-btns">
+                                <div class="btn-add-cart cursor-pointer btn btn-sm btn-cart fw-semibold" data-id="{{ $product->id }}"
+                                  data-sku-id="{{ $product->masterSku->id }}">{{ __('front/product.add_to_cart') }}</div>
+                              </div>
+                              
+                            </div>
+                          </div>
+                        </div>
+                  </article>
+                </div>
+              </div>  
+            @endforeach
+          </div>
+        @else
+          <x-common-no-data />
+        @endif
+      </div>
+    </div>
+  </div>
+</div>
+
+@hookinsert('account.favorites.bottom')
+
+@endsection
+
+@push('footer')
+<script>
+  $('.cancel-favorite').on('click', function () {
+    const id = $(this).attr('data-id');
+    inno.addWishlist(id, 1, null, function () {
+      setTimeout(() => {
+        location.reload();
+      }, 800);
+    })
+  });
+</script>
+@endpush

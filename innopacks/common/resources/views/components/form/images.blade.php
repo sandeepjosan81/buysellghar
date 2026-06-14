@@ -1,49 +1,52 @@
 <x-panel::form.row :title="$title">
-  <div class="multi-images-upload-wrapper">
-    <div class="is-up-file text-start" data-img-max="{{ $max }}" data-type="{{ $type }}">
-    <!-- Add sortable container -->
-    <div class="img-sortable-container d-flex flex-wrap" data-sortable="true">
-      @foreach ($values as $v)
-      <div
-        class="img-upload-item wh-80 position-relative d-flex justify-content-center rounded overflow-hidden align-items-center border border-1 mb-1 me-1"
-        data-sortable-item>
-        <div class="position-absolute tool-wrap d-flex top-0 start-0 w-100 bg-primary bg-opacity-75">
-          <div class="show-img w-100 text-center"><i class="bi bi-eye text-white"></i></div>
-          <div class="w-100 delete-img text-center"><i class="bi bi-trash text-white"></i></div>
-        </div>
-        <!-- Drag handle positioned at the bottom of the image -->
-        <div class="position-absolute drag-handle bottom-0 start-0 w-100 bg-primary bg-opacity-25 text-center">
-          <i class="bi bi-arrows-move text-black"></i>
-        </div>
-        <div class="img-info d-flex justify-content-center align-items-center h-100 w-80 bg-white">
-          @if ($v)
-          <img src="{{ image_resize($v) }}" class="img-fluid"
-            data-origin-img="{{ image_origin($v) }}">
-          @else
-          <i class="bi bi-plus-lg fs-3 text-secondary"></i>
-          @endif
-        </div>
-        <input class="d-none" name="{{ $name }}[]" value="{{ $v }}">
+  <div class="col-12 col-md-4">
+      <div class="multi-images-upload-wrapper">
+        <div class="is-up-file text-start" data-img-max="{{ $max }}" data-type="{{ $type }}">
+            <!-- Add sortable container -->
+            <div class="img-sortable-container d-flex flex-wrap" data-sortable="true">
+              @foreach ($values as $v)
+              <div
+                class="img-upload-item wh-80 position-relative d-flex justify-content-center rounded overflow-hidden align-items-center border border-1 mb-1 me-1"
+                data-sortable-item>
+                <div class="position-absolute tool-wrap d-flex top-0 start-0 w-100 bg-primary bg-opacity-75">
+                  <div class="show-img w-100 text-center"><i class="bi bi-eye text-white"></i></div>
+                  <div class="w-100 delete-img text-center"><i class="bi bi-trash text-white"></i></div>
+                </div>
+                <!-- Drag handle positioned at the bottom of the image -->
+                <div class="position-absolute drag-handle bottom-0 start-0 w-100 bg-primary bg-opacity-25 text-center">
+                  <i class="bi bi-arrows-move text-black"></i>
+                </div>
+                <div class="img-info d-flex justify-content-center align-items-center h-100 w-80 bg-white">
+                  @if ($v)
+                  <img src="{{ image_resize($v) }}" class="img-fluid"
+                    data-origin-img="{{ image_origin($v) }}">
+                  @else
+                  <i class="bi bi-plus-lg fs-3 text-secondary"></i>
+                  @endif
+                </div>
+                <input class="d-none" name="{{ $name }}[]" value="{{ $v }}">
+              </div>
+              @endforeach
+              <div
+                class="img-upload-item wh-80 img-upload-trigger d-flex overflow-hidden justify-content-center rounded align-items-center border border-1 mb-1">
+                <div class="img-info d-flex justify-content-center align-items-center wh-80 bg-white cursor-pointer">
+                  <i class="bi bi-plus-lg fs-3 text-secondary"></i>
+                </div>
+              </div>
+            </div>
+            @hookinsert('panel.product.edit.img_upload.after')
+            <span class="text-muted" style="font-size: 12px">
+              <i class="bi bi-info-circle"></i> {{ __('common/upload.upload_hint') }}
+              @if ($max)
+              <br>
+                {{ __('common/upload.max_upload_count') }}(<span class="imgs-count">{{ count($values) }}</span>/{{ $max }}){{ __('common/upload.image_unit') }}
+              @endif
+            </span>
+            {{ $slot }}
+          </div>
       </div>
-      @endforeach
-      <div
-        class="img-upload-item wh-80 img-upload-trigger d-flex overflow-hidden justify-content-center rounded align-items-center border border-1 mb-1">
-        <div class="img-info d-flex justify-content-center align-items-center wh-80 bg-white cursor-pointer">
-          <i class="bi bi-plus-lg fs-3 text-secondary"></i>
-        </div>
-      </div>
-    </div>
-    @hookinsert('panel.product.edit.img_upload.after')
-    <span class="text-muted" style="font-size: 12px">
-      <i class="bi bi-info-circle"></i> {{ __('common/upload.upload_hint') }}
-      @if ($max)
-      <br>
-        {{ __('common/upload.max_upload_count') }}(<span class="imgs-count">{{ count($values) }}</span>/{{ $max }}){{ __('common/upload.image_unit') }}
-      @endif
-    </span>
-    {{ $slot }}
   </div>
-  </div>
+  
 </x-panel::form.row>
 
 @pushOnce('footer')

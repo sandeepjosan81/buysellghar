@@ -20,27 +20,29 @@
   <script src="{{ asset('vendor/layer/3.5.1/layer.js') }}"></script>
   <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
-  <!-- Zoom Image-->
-  <link rel="stylesheet" href="{{ mix('build/front/css/jquery.jqZoom.css') }}" type="text/css"/>
-  <script src="{{ mix('build/front/js/jquery.jqZoom.js') }}"></script>
-  <script>
-      $(function(){
-          $(".zoom-box img").jqZoom({
-              selectorWidth: 30,
-              selectorHeight: 30,
-              viewerWidth: 400,
-              viewerHeight: 300
-          });
-
-      })
-  </script>
-  <!-- Zoom Image-->
-  
+  <?php 
+    /*
+      <!-- Zoom Image-->
+      <link rel="stylesheet" href="{{ mix('build/front/css/jquery.jqZoom.css') }}" type="text/css"/>
+      <script src="{{ mix('build/front/js/jquery.jqZoom.js') }}"></script>
+      <script>
+          $(function(){
+              $(".zoom-box img").jqZoom({
+                  selectorWidth: 30,
+                  selectorHeight: 30,
+                  viewerWidth: 400,
+                  viewerHeight: 300
+              });
+          })
+      </script>
+      <!-- Zoom Image-->
+    */ 
+  ?>  
   <link rel="stylesheet" href="{{ mix('build/front/css/fonts/bootstrap-icons.min.css') }}">
   <link rel="stylesheet" href="{{ mix('build/front/css/landing.css') }}">
-  <link rel="stylesheet" href="{{ mix('build/front/css/landing-template2.css') }}">
-  <link rel="stylesheet" href="{{ mix('build/front/css/app.css') }}">
+  <link rel="stylesheet" href="{{ mix('build/front/css/landing-template2.css') }}">  
   
+  <link rel="stylesheet" href="{{ mix('build/front/css/app.css') }}">  
   <!-- Facebook, WhatsApp, LinkedIn  -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Your Page Title">
@@ -109,6 +111,22 @@
 
     const asset_url = '{{ asset('') }}';
   </script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+
+  <?php /*
+
+    @font-face {
+    font-family: 'Montserrat';
+        src: url(https://cdn.staticmb.com/mbfonts/montserrat-regular.woff2) format('woff2'), url(https://cdn.staticmb.com/mbfonts/montserrat-regular.woff) format('woff'), url(https://cdn.staticmb.com/mbfonts/montserrat-regular.ttf) format('ttf');
+        font-display: block;
+        font-style: normal;
+    }
+  </style>
+  */ ?>
+
+
   @stack('header')
   @hookinsert('front.layout.app.head.bottom')
 </head>

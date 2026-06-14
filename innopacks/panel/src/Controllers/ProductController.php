@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use InnoShop\Common\Models\Product;
+use InnoShop\Common\Models\Product\PropertyProps;
 use InnoShop\Common\Repositories\AttributeRepo;
 use InnoShop\Common\Repositories\BrandRepo;
 use InnoShop\Common\Repositories\ProductRepo;
@@ -17,6 +18,7 @@ use InnoShop\Panel\Requests\ProductRequest;
 use InnoShop\Panel\Resources\ProductNameResource;
 use Throwable;
 use DNS1D;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends BaseController
 {
@@ -27,13 +29,21 @@ class ProductController extends BaseController
      */
     public function index(Request $request): mixed
     {
+    
+       $property = Product::with('propertyProps')->get();//->toArray();
+        // echo "<pre>";
+        // print_r($property[0]->propertyProps->seller_type ?? []);
+        // exit;
+
         $filters = $request->all();
-        
+   
         $data = [
             'criteria'        => ProductRepo::getCriteria(),
             'sortOptions'     => ProductRepo::getSortOptions(),
             'products'        => ProductRepo::getInstance()->list($filters),
             'categoryOptions' => ProductRepo::getCategoryOptions(),
+            
+            // 'seller'          => $seller,
         ];
 
         return inno_view('panel::products.index', $data);
@@ -76,8 +86,15 @@ class ProductController extends BaseController
     public function store(ProductRequest $request): RedirectResponse
     {
         try {
-            $data    = $request->all();
+            $data    = $request->all();           
+            $data['admin_id'] = Auth::id(); // Set the admin_id to the currently authenticated admin's ID
+            
+            // echo "<pre>";
+            // print_r($data);
+            // exit;
+            
             $product = ProductRepo::getInstance()->create($data);
+
 
             return redirect(panel_route('products.index', ['sort' => 'updated_at', 'order' => 'desc']))
                 ->with('instance', $product)
@@ -100,7 +117,7 @@ class ProductController extends BaseController
     }
 
     /**
-     * 处理产品选项数据，为Vue3组件准备JSON格式数据
+     * 
      *
      * @param  $product
      * @return array
@@ -190,6 +207,20 @@ class ProductController extends BaseController
             'selectedRelatedProducts' => $selectedRelatedProducts,
             'existingProductOptions'  => $productOptionsData['existingProductOptions'],
             'existingOptionValues'    => $productOptionsData['existingOptionValues'],
+            'sellerTypeOptions'       => PropertyProps::getSellerTypeOptions(),
+            'propertyForOptions'      => PropertyProps::getPropertyForOptions(),
+            'propertyListTypeOptions' => PropertyProps::getPropertyListTypeOptions(),
+            'bedroomsOptions'         => PropertyProps::getBedroomsOptions(),
+            'balconyOptions'          => PropertyProps::getBalconyOptions(),
+            'totalFloorsOptions'      => PropertyProps::getTotalFloorsOptions(),
+            'bathRoomsOptions'        => PropertyProps::getBathRoomsOptions(),
+            'areaTypeOptions'         => PropertyProps::getAreaTypeOptions(),
+            'facingOptions'           => PropertyProps::getFacingOptions(),
+            'furnishedStatusOptions'  => PropertyProps::getFurnishedStatusOptions(),
+            'priceTypeOptions'        => PropertyProps::getPriceTypeOptions(),
+            'propertyAgeOptions'      => PropertyProps::getPropertyAgeOptions(),
+            'maintenanceCostPeriodOptions' => PropertyProps::getMaintenanceCostPeriodOptions(),
+            'openSideOptions'         => PropertyProps::getOpenSideOptions(),
         ];
 
         return inno_view('panel::products.form', $data);
@@ -205,7 +236,7 @@ class ProductController extends BaseController
     {
         try {
             $data = $request->all();
-            // $data    = $request->all();
+            $data    = $request->all();
             // echo "<pre>";
             // print_r($data);
             // exit;

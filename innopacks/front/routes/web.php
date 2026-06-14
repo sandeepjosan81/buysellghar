@@ -23,10 +23,15 @@ Route::get('/categories/{category}', [Controllers\CategoryController::class, 'sh
 Route::get('/category-{slug}', [Controllers\CategoryController::class, 'slugShow'])->name('categories.slug_show');
 
 // Product
-Route::get('/products', [Controllers\ProductController::class, 'index'])->name('products.index');
-Route::get('/products/{product}', [Controllers\ProductController::class, 'show'])->name('products.show');
-Route::get('/product-{slug}', [Controllers\ProductController::class, 'slugShow'])->name('products.slug_show');
-Route::get('/products/{product}/reviews', [Controllers\ProductController::class, 'reviews'])->name('products.reviews');
+// Route::get('/products', [Controllers\ProductController::class, 'index'])->name('products.index');
+// Route::get('/products/{product}', [Controllers\ProductController::class, 'show'])->name('products.show');
+// Route::get('/product-{slug}', [Controllers\ProductController::class, 'slugShow'])->name('products.slug_show');
+// Route::get('/products/{product}/reviews', [Controllers\ProductController::class, 'reviews'])->name('products.reviews');
+
+Route::get('/properties', [Controllers\ProductController::class, 'index'])->name('products.index');
+Route::get('/properties/{product}', [Controllers\ProductController::class, 'show'])->name('products.show');
+Route::get('/property-{slug}', [Controllers\ProductController::class, 'slugShow'])->name('products.slug_show');
+Route::get('/properties/{product}/reviews', [Controllers\ProductController::class, 'reviews'])->name('products.reviews');
 
 // Brands
 Route::get('/brands', [Controllers\BrandController::class, 'index'])->name('brands.index');
@@ -97,6 +102,10 @@ Route::get('/forgotten', [Account\ForgottenController::class, 'index'])->name('f
 Route::post('/forgotten/verify_code', [Account\ForgottenController::class, 'sendVerifyCode'])->name('forgotten.verify_code');
 Route::post('/forgotten/password', [Account\ForgottenController::class, 'changePassword'])->name('forgotten.password');
 
+// Route::get('/leadcontact', [Controllers\LeadContactController::class, 'index'])->name('leadcontact.index');
+Route::resource('/leadcontact', Controllers\LeadContactController::class);
+
+
 Route::prefix('account')
     ->name('account.')
     ->middleware('customer_auth:customer')
@@ -149,4 +158,6 @@ Route::prefix('account')
         Route::put('/password', [Account\PasswordController::class, 'update'])->name('password.update');
 
         Route::get('/logout', [Account\LogoutController::class, 'index'])->name('logout');
+
+       
     });

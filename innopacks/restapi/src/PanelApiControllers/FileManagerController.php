@@ -12,7 +12,7 @@ use InnoShop\RestAPI\Requests\FileRequest;
 use InnoShop\RestAPI\Services\FileManagerInterface;
 use InnoShop\RestAPI\Services\FileManagerService;
 use InnoShop\RestAPI\Services\OSSService;
-
+use Illuminate\Support\Facades\Auth;
 class FileManagerController extends BaseController
 {
     public function __construct()
@@ -157,6 +157,10 @@ class FileManagerController extends BaseController
     {
         $service    = $this->getService();
         $baseFolder = $request->get('base_folder', '/');
+        if (Auth::check() && auth()->user()->hasAnyRole(['Seller'])){
+            $baseFolder = 'seller-uploads/' . auth()->id().'/';     
+            
+        }
         $data       = $service->getDirectories($baseFolder);
 
         return response()->json([
@@ -176,8 +180,13 @@ class FileManagerController extends BaseController
         try {
             $folderName = $request->get('name');
             $parentId   = $request->get('parent_id', '/');
-
+           
             $fullPath = $parentId === '/' ? "/{$folderName}" : "{$parentId}/{$folderName}";
+
+            if (Auth::check() && auth()->user()->hasAnyRole(['Seller'])){
+                $parentId = $parentId === '/'? 'seller-uploads/' . auth()->id() :$parentId;  
+                $fullPath = $parentId === '/seller-uploads/' . auth()->id() ? "/{$folderName}" : "{$parentId}/{$folderName}";
+            }
 
             $service = $this->getService();
             $service->createDirectory($fullPath);
@@ -244,7 +253,7 @@ class FileManagerController extends BaseController
                 throw new Exception(trans('panel::file_manager.no_files_selected'));
             }
 
-            $service = $this->getService();
+           $service = $this->getService();
             $service->deleteFiles($basePath, $files);
 
             return json_success(trans('common.deleted_success'));

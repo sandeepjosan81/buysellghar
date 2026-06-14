@@ -53,78 +53,277 @@
   <div class="container">
     <div class="page-product-top">
       <div class="row">
-        <div class="col-12 col-lg-6 product-left-col">
+        <div class="col-12 col-lg-5 product-left-col">
           <div class="product-images">
             @include('products.components._images')
           </div>
         </div>
 
-        <div class="col-12 col-lg-4">
+        <div class="col-12 col-lg-5">
           <div class="product-info"> <!--  border-bottom -->
-            <h1 class="product-title">{{ $product->fallbackName() }}</h1>
-            @hookupdate('front.product.show.price')
+            <h1 class="product-title">{{ $product->fallbackName() }} - {{ ucfirst($product->propertyProps->city) }}</h1>
+            <!-- @hookupdate('front.product.show.price')
             <div class="product-price">
               <span class="price">{{ $sku['price_format'] }}</span>
               @if($sku['origin_price'])
                 <span class="old-price ms-2">{{ $sku['origin_price_format'] }}</span>
               @endif
             </div>
-            @endhookupdate
+            @endhookupdate -->
 
-            <div class="stock-wrap">
+            <!-- <div class="stock-wrap">
               @if($sku['quantity'] > 0)
                 <div class="in-stock badge">{{ __('front/product.in_stock') }}</div>
               @else
                 <div class="out-stock badge d-none">{{ __('front/product.out_stock') }}</div>
-              @endif
-                
-            </div>
+              @endif                
+            </div> -->
 
             @hookinsert('product.detail.stock.after')
+            <div class="sub-product-title mb-4">{{ $product->fallbackName('summary') }}</div>
 
-            <div class="sub-product-title">{{ $product->fallbackName('summary') }}</div>
-
+            <!--  -->
+              <div class="row g-3">
+                @if(isset($product->propertyProps->super_builtup_area))  
+                  <div class="col-4 col-md-4">
+                      <div class="border rounded p-3 h-100">
+                          <small class="text-muted d-block">Area</small>
+                          <strong>{{ getSuperArea($product) }}</strong>
+                      </div>
+                  </div>
+                @endif  
+                @if(isset($product->propertyProps->bedrooms))
+                  <div class="col-4 col-md-4">
+                      <div class="border rounded p-3 h-100">
+                          @php
+                            $bedrooms = ($product->propertyProps->bedrooms)? $product->propertyProps->bedrooms. ' BHK' : "";                        
+                          @endphp
+                          <small class="text-muted d-block">Bedrooms</small>
+                          <strong>{{ $bedrooms }}</strong>
+                      </div>
+                  </div> 
+                @endif   
+               
+                @if(isset($product->propertyProps->price))
+                <div class="col-4 col-md-4">
+                    <div class="border rounded p-3 h-100">
+                        <small class="text-muted d-block">Price</small>
+                        <strong>{{  $product->propertyProps->getProprtyPriceFormat() }}</strong>
+                    </div>
+                </div>
+                @endif
+                @if(isset($product->propertyProps->city))
+                <div class="col-4 col-md-4">
+                    <div class="border rounded p-3 h-100">
+                        <small class="text-muted d-block">City</small>
+                        <strong>{{ ucfirst($product->propertyProps->city) }}</strong>
+                    </div>
+                </div>
+                @endif
+                @if(isset($product->propertyProps->property_type))
+                <div class="col-4 col-md-4">
+                    <div class="border rounded p-3 h-100">
+                      @if ($product->categories->count())
+                          <small class="text-muted d-block">{{ __('front/product.property_type') }}</small>
+                          <strong>
+                            @foreach ($product->categories as $category)
+                              <a href="{{ $category->url }}"
+                                    class="text-dark">{{ $category->fallbackName() }}</a>{{ !$loop->last ? ', ' : '' }}
+                            @endforeach
+                          </strong>
+                      @endif
+                    </div>
+                </div>
+                @endif 
+                @if(isset($product->propertyProps->property_for))
+                  <div class="col-4 col-md-4">
+                      <div class="border rounded p-3 h-100">
+                          <small class="text-muted d-block">For</small>
+                          <strong>{{ getPropertyFor($product) }}</strong>
+                      </div>
+                  </div>
+                @endif 
+                @if(isset($product->propertyProps->furnished_status))
+                  <div class="col-6 col-md-4">
+                      <div class="border rounded p-3 h-100">
+                          <small class="text-muted d-block">Furnished Status</small>
+                          <strong>{{ getFurnishedStatus($product) }}</strong>
+                      </div>
+                  </div>
+                  @endif
+              </div>
+              <!--  -->
+              <div class="d-flex mt-4">
+                  <div class="col-md-3">
+                    <button class="contact-btn custom_contact" data-url="{{ $product->url }}" data-product-id="{{ $product->id }}" data-bs-toggle="modal" data-bs-target="#leadContactModal">☎ Contact</button>
+                  </div>
+                  <div class="col-md-3 mt-3">
+                      <div class="add-wishlist mb-3 ps-2" data-in-wishlist="{{ $product->hasFavorite() }}"
+                      data-id="{{ $product->id }}"
+                      data-price="{{ $product->masterSku->price }}">
+                      <i class="bi bi-heart{{ $product->hasFavorite() ? '-fill' : '' }}"></i> {{ __('front/product.add_wishlist') }}
+                      </div>
+                  </div>
+                  
+              </div>
+            
             @include('products.components._bundle_items')
+              <div class="details-card mt-3">
+                  
+                  <div class="detail-row">
+                    <h4 class="product-props">{{ __('front/product.product_properties') }}</h4>
+                  </div>
+                  @if(isset($product->propertyProps->plot_area) )
+                    <div class="detail-row">
+                      <div class="detail-label">Plot Area</div>
+                      <div class="detail-value">{{ $product->propertyProps->plot_area.' '.getAreaType($product) }}</div>
+                    </div>
+                  @endif
+                  
+                  @if(isset($product->propertyProps->plot_length) )
+                    <div class="detail-row">
+                      <div class="detail-label">Plot Length</div>
+                      <div class="detail-value">{{ $product->propertyProps->plot_length }} Ft</div>
+                    </div>
+                  @endif
+                  @if(isset($product->propertyProps->plot_breadth) )
+                    <div class="detail-row">
+                      <div class="detail-label">Plot Breadth</div>
+                      <div class="detail-value">{{ ucfirst($product->propertyProps->plot_breadth) }} Ft</div>
+                    </div>
+                  @endif
+
+                  @if(isset($product->propertyProps->covered_area) )
+                    <div class="detail-row">
+                      <div class="detail-label">Covered Area</div>
+                      <div class="detail-value">{{ $product->propertyProps->covered_area.' '. getCoverArea($product)  }}</div>
+                    </div>
+                  @endif
+
+                  @if(isset($product->propertyProps->carpet_area) )
+                    <div class="detail-row">
+                      <div class="detail-label">Carpet Area</div>
+                      <div class="detail-value">{{ $product->propertyProps->carpet_area.' '. getCoverArea($product)  }}</div>
+                    </div>
+                  @endif                  
+                 
+                  @if(isset($product->propertyProps->bathrooms))
+                  <div class="detail-row">
+                      <div class="detail-label">Bathrooms</div>
+                      <div class="detail-value">{{ $product->propertyProps->bathrooms }}</div>
+                  </div>
+                  @endif
+                  @if(isset($product->propertyProps->balcony))
+                  <div class="detail-row">
+                      <div class="detail-label">Balconies</div>
+                      <div class="detail-value">{{ $product->propertyProps->balcony }}</div>
+                  </div>
+                  @endif
+                  @if(isset($product->propertyProps->total_floors))
+                  <div class="detail-row">
+                      <div class="detail-label">Total Floors</div>
+                      <div class="detail-value">{{$product->propertyProps->total_floors}}</div>
+                  </div>
+                  @endif
+                  @if(isset($product->propertyProps->floor_no))
+                  <div class="detail-row">
+                      <div class="detail-label">Floor No.</div>
+                      <div class="detail-value">{{getTotalFloors($product, $product->propertyProps->floor_no)}}</div>
+                  </div>
+                  @endif
+                  @if(isset($product->propertyProps->facing))
+                  <div class="detail-row">
+                      <div class="detail-label">Facing</div>
+                      <div class="detail-value">{{ucfirst($product->propertyProps->facing)}}</div>
+                  </div>
+                  @endif
+                  
+                  @if(isset($product->propertyProps->location) || isset($product->propertyProps->address))
+                  <div class="detail-row">
+                      <div class="detail-label">Location/Address</div>
+                      <div class="detail-value">{{ ucfirst($product->propertyProps->location) . "(".ucfirst($product->propertyProps->address).")" }}  </div>
+                  </div>
+                  @endif                 
+                  
+                  
+                  @if(isset($product->propertyProps->open_side) )
+                    <div class="detail-row">
+                      <div class="detail-label">Open Side</div>
+                      <div class="detail-value">{{ ucfirst($product->propertyProps->open_side) }}</div>
+                    </div>
+                  @endif
+
+
+                  @if(isset($product->propertyProps->property_age) )
+                    <div class="detail-row">
+                      <div class="detail-label">Property Age (How old property)</div>
+                      <div class="detail-value">{{ $product->propertyProps->property_age  }}</div>
+                    </div>
+                  @endif
+
+                  @if(isset($product->propertyProps->maintenance_cost) )
+                    <div class="detail-row">
+                      <div class="detail-label">Maintenance Cost</div>
+                      <div class="detail-value">{{ $product->propertyProps->maintenance_cost  }}</div>
+                    </div>
+                  @endif
+
+                  @if(isset($product->propertyProps->ownership_status) )
+                    <div class="detail-row">
+                      <div class="detail-label">Ownership status</div>
+                      <div class="detail-value">{{ $product->propertyProps->ownership_status  }}</div>
+                    </div>
+                  @endif
+                  @if(isset($product->propertyProps->rera_registration_no) )
+                    <div class="detail-row">
+                      <div class="detail-label">Rera Registration no</div>
+                      <div class="detail-value">{{ $product->propertyProps->rera_registration_no  }}</div>
+                    </div>
+                  @endif
+
+                  @if(isset($product->propertyProps->transaction_type) )
+                    <div class="detail-row">
+                      <div class="detail-label">Transaction Type</div>
+                      <div class="detail-value">{{ getTransactionType($product) }}</div>
+                    </div>
+                  @endif
+                  
+                  @if(isset($product->propertyProps->is_corner) )
+                    <div class="detail-row">
+                      <div class="detail-label">Is corner?</div>
+                      <div class="detail-value">{{ $product->propertyProps->is_corner? "Yes" : "No"  }}</div>
+                    </div>
+                  @endif
+
+              </div>
 
             <ul class="product-param">
-              <li class="sku"><span class="title">{{ __('front/product.sku_code') }}:</span> <span
+              <!-- <li class="sku"><span class="title">{{ __('front/product.sku_code') }}:</span> <span
                   class="value">{{ $sku['code'] }}</span></li>
               <li class="model {{ !($sku['model'] ?? false) ? 'd-none' : '' }}"><span class="title">{{ __('front/product.model') }}:</span>
-                <span class="value">{{ $sku['model'] }}</span></li>
-              @if ($product->categories->count())
-                <li class="category">
-                  <span class="title">{{ __('front/product.category') }}:</span>
-                  <span class="value">
-                @foreach ($product->categories as $category)
-                      <a href="{{ $category->url }}"
-                         class="text-dark">{{ $category->fallbackName() }}</a>{{ !$loop->last ? ', ' : '' }}
-                    @endforeach
-              </span>
-                </li>
-              @endif
-              @if($product->brand)
+                <span class="value">{{ $sku['model'] }}</span></li> -->
+              
+              <!-- @if($product->brand)
                 <li class="brand">
                   <span class="title">{{ __('front/product.brand') }}:</span> <span class="value">
                     <a href="{{ $product->brand->url }}"> {{ $product->brand->name }} </a>
                   </span>
                 </li>
               @endif
-              @hookinsert('product.detail.brand.after')
-              <li class="brand">
+              @hookinsert('product.detail.brand.after') -->
+              <!-- <li class="brand">
                 <div class="detail-star-rating">
                   <span class="title">{{ __('front/product.rating') }}:</span> 
                     <p class="rating-badge mb-2">{{ getAvgRating($product->id) }} ★ <span>({{ getTotalReviews($product->id) }})</span></p>
                 </div>
-              </li>
+              </li> -->
 
             </ul>
 
-            @include('products.components._variants')
+            <!-- @include('products.components._variants')            
+            @include('products.components._options')           -->
             
-            @include('products.components._options')
-            
-            
-            @if(!system_setting('disable_online_order'))
+            <!-- @if(!system_setting('disable_online_order'))
             
               <div class="product-info-bottom">
                 <div class="quantity-wrap">
@@ -145,14 +344,9 @@
                   @hookinsert('product.detail.cart.after')
                 </div>
               </div>
-            @endif
+            @endif -->
 
-            <div class="add-wishlist mb-3" data-in-wishlist="{{ $product->hasFavorite() }}"
-                 data-id="{{ $product->id }}"
-                 data-price="{{ $product->masterSku->price }}">
-              <i
-                class="bi bi-heart{{ $product->hasFavorite() ? '-fill' : '' }}"></i> {{ __('front/product.add_wishlist') }}
-            </div>
+
 
             @if($attributes)
             <div class="head-title pt-3">
@@ -184,7 +378,7 @@
         </div>
         <div class="col-12 col-lg-2">
           <h4>{{ __('front/product.share_this_product') }}</h4>
-          <div class="share-buttons icon-container">
+          <div class="share-buttons icon-container d-flex gap-3 pt-4 pb-3 fsize25">
             <div class="share-button share-facebook-wrap">
                 <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($product->url) }}" target="_blank" class="share-button share-facebook">
                   <i class="bi bi-facebook"></i>
@@ -231,21 +425,16 @@
 
                               <div>
                                   <a href="{{ $deal->url }}" class="text-dark small text-decoration-none">
-                                      {{ getFivewords($deal->fallbackName(), 3) }}
+                                     {{ getSuperArea($product) }} | {{ getFivewords($deal->fallbackName(), 3) }} | For {{ getPropertyFor($product) }}
                                   </a>
 
                                   <div class="fw-bold text-primary small">
-                                      {{ $deal->masterSku->getFinalPriceFormat() }}
+                                      {{ $deal->propertyProps->getProprtyPriceFormat() }}
                                   </div>
-
-                                  @if ($deal->masterSku->origin_price)
-                                    <div class="d-flex">
-                                      <div class="text-muted text-decoration-line-through small">
-                                          {{ $deal->masterSku->origin_price_format }}
-                                      </div>
-                                      <span class="discount-badge">-{{getDiscountPercentage($deal->masterSku->origin_price, $deal->masterSku->getFinalPrice()) }}%</span>
-                                    </div>                            
-                                  @endif
+                                  <div class=" small">
+                                    {{ ucfirst($product->propertyProps->city) }}
+                                  </div>
+                                  
                               </div>
 
                           </div>
@@ -269,10 +458,12 @@
                   data-bs-target="#product-description-description"
                   type="button">{{ __('front/product.description') }}</button>
         </li>
+        <?php /*
          <li class="nav-item">
           <button class="nav-link" data-bs-toggle="tab" data-bs-target="#product-review"
                   type="button">{{ __('front/product.review') }}</button>
         </li>
+        */ ?>
   
         @hookinsert('product.detail.tab.link.after')
       </ul>
@@ -286,11 +477,14 @@
         </div>
 
         
+      <?php 
+        /*
+          <div class="tab-pane fade" id="product-review" role="tabpanel">
+            @include('products.components._review_section')
+          </div>
+        */ 
+      ?>
 
-        <div class="tab-pane fade" id="product-review" role="tabpanel">
-          @include('products.components._review_section')
-        </div>
-       
         @hookinsert('product.detail.tab.pane.after')
       </div>
     </div>

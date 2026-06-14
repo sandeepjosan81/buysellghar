@@ -11,12 +11,19 @@ use InnoShop\Panel\Notifications\ForgottenNotification;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-class Admin extends AuthUser
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Auth\MustVerifyEmail as MustVerifyEmailTrait;
+
+
+class Admin extends AuthUser implements MustVerifyEmail
 {
+    use MustVerifyEmailTrait;
+
     use HasApiTokens, HasFactory, HasRoles, Notifiable;
 
     protected $fillable = [
-        'name', 'email', 'password', 'locale', 'active',
+        'name', 'email', 'password', 'locale', 'active', 'whatsapp_no',
     ];
 
     protected $hidden = [

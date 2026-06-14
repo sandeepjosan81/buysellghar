@@ -17,68 +17,387 @@
   <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
   <script src="{{ asset('vendor/layer/3.5.1/layer.js') }}"></script>
   @stack('header')
+   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #f7f9fc;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 20px;
+      color: #253858;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .login-wrap {
+      width: 100%;
+    }
+
+    .wrapper {
+      width: 1200px;
+      max-width: 100%;
+      display: flex;
+      background: transparent;
+      position: relative;
+      flex-wrap: wrap;
+    }
+
+    .panel {
+      background: #fff;
+      box-shadow: 0 14px 35px rgba(45, 80, 130, 0.12);
+      min-height: auto;
+    }
+
+    .left-panel {
+      margin-left: 5%;
+      width: 50%;
+      padding: 70px 80px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .right-panel {
+      width: 42%;
+      padding: 40px 70px;
+      margin-left: -20px;
+      z-index: 2;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 34px;
+      color: #253858;
+    }
+
+    .features {
+      list-style: none;
+      margin-bottom: 34px;
+    }
+
+    .features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      font-size: 17px;
+      line-height: 1.6;
+      color: #253858;
+      margin-bottom: 18px;
+    }
+
+    .check {
+      color: #82a9d6;
+      font-size: 20px;
+      line-height: 1.2;
+      margin-top: 1px;
+      flex-shrink: 0;
+    }
+
+    .register-btn {
+      display: inline-block;
+      padding: 14px 44px;
+       border: 1px solid #d9a234;
+      color: #DB9200;
+      background: #fff;
+      border-radius: 2px;
+      font-size: 18px;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02);
+    }
+
+    .illustration {
+      position: absolute;
+      right: 40px;
+      bottom: 25px;
+      width: 240px;
+      opacity: 0.98;
+    }
+
+    .form-group {
+      margin-bottom: 30px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      color: #253858;
+      margin-bottom: 8px;
+    }
+
+    input {
+      width: 100%;
+      height: 55px;
+      border: 1px solid #d9dde7;
+      outline: none;
+      padding: 0 14px;
+      font-size: 15px;
+      color: #253858;
+      background: #fff;
+    }
+
+    input::placeholder {
+      color: #b7becb;
+    }
+
+    .password-wrap {
+      position: relative;
+    }
+
+    .show-text {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #7e9dc5;
+      font-size: 15px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .forgot {
+      text-align: right;
+      margin-top: 10px;
+      margin-bottom: 24px;
+      font-size: 14px;
+      color: #7e9dc5;
+    }
+
+    .login-btn {
+      width: 100%;
+      height: 48px;
+      border: none;
+      background: #DB9200;
+      color: white;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-bottom: 18px;
+    }
+
+    .otp-link {
+      text-align: center;
+      color: #a57f31;
+      font-size: 16px;
+      margin-bottom: 28px;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 20px 0 28px;
+      color: #9aa6b7;
+      font-size: 14px;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: #dcdfe6;
+    }
+
+    .google-btn {
+      width: 100%;
+      height: 50px;
+      border: 1px solid #e6eaf0;
+      border-radius: 25px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      color: #6c7785;
+      font-size: 16px;
+      font-weight: 600;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .google-btn img {
+      width: 22px;
+      height: 22px;
+    }
+
+    .header-logo-r {
+      height: 40px;
+    }
+
+    .login-wrap p {
+      margin-bottom: 0;
+    }
+
+    /* Mobile Responsive Styles */
+    @media (max-width: 980px) {
+      .wrapper {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .left-panel,
+      .right-panel {
+        width: 100%;
+        margin-left: 0;
+        padding: 40px 30px;
+      }
+
+      .left-panel {
+        margin-bottom: 20px;
+      }
+
+      h1 {
+        font-size: 24px;
+        margin-bottom: 24px;
+      }
+
+      .features li {
+        font-size: 15px;
+        margin-bottom: 14px;
+      }
+
+      .register-btn {
+        padding: 12px 30px;
+        font-size: 16px;
+      }
+
+      input {
+        height: 48px;
+        font-size: 16px;
+      }
+
+      .login-btn {
+        height: 50px;
+        font-size: 16px;
+      }
+
+      .header-logo-r {
+        height: 35px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      body {
+        padding: 15px;
+        align-items: flex-start;
+      }
+
+      .left-panel,
+      .right-panel {
+        padding: 30px 20px;
+      }
+
+      h1 {
+        font-size: 22px;
+        margin-bottom: 20px;
+      }
+
+      .features li {
+        font-size: 14px;
+        gap: 10px;
+      }
+
+      .check {
+        font-size: 18px;
+      }
+
+      .register-btn {
+        padding: 12px 24px;
+        font-size: 15px;
+        display: block;
+        text-align: center;
+      }
+
+      label {
+        font-size: 13px;
+      }
+
+      input {
+        height: 46px;
+        font-size: 15px;
+        padding: 0 12px;
+      }
+
+      .show-text {
+        font-size: 14px;
+        right: 12px;
+      }
+
+      .login-btn {
+        height: 48px;
+        font-size: 15px;
+      }
+
+      .header-logo-r {
+        height: 32px;
+      }
+    }
+  </style>
 </head>
-<body class="page-login">
-  <div class="">
-    <div class="container vh-100 pt-2 pt-sm-5 pb-4 pb-sm-5">
-      <div class="locale-wrap">
-        <div class="d-flex align-items-center locale">
-          <div class="wh-20 me-2"><img src="{{ image_origin('images/flag/'. panel_locale_code().'.png') }}" class="img-fluid"></div>
-          <span class="">{{ current_panel_locale()['name'] }} <i class="bi bi-chevron-down"></i></span>
-          <ul class="dropdown-menu">
-            @foreach (panel_locales() as $locale)
-            <li>
-              <a class="dropdown-item d-flex" href="{{ panel_route('login.index', ['locale'=> $locale['code']]) }}">
-                <div class="wh-20 me-2"><img src="{{ image_origin($locale['image']) }}" class="img-fluid"></div>
-                {{ $locale['name'] }}
-              </a>
-            </li>
-            @endforeach
-          </ul>
+<body class="page-login1 mt-4">
+  <div class="row d-flex justify-content-center pt-5">
+    <div class="wrapper">
+      <div class="panel left-panel">
+        <div class="header-logo-r d-flex justify-content-center mb-4">
+          <a href="#" class="register-sidebar-logo">
+            <img src="{{ image_origin(system_setting('panel_logo', 'images/logo-panel.png')) }}" class="img-fluid register" alt="Logo">
+          </a>
         </div>
+        <ul class="features">
+          <li><span class="check">✓</span><span>Create post ads on BuySellGhar Seller profile.</span></li>
+          <li><span class="check">✓</span><span>Get relevant business leads.</span></li>
+          <li><span class="check">✓</span><span>Schedule visit with clients.</span></li>
+          <li><span class="check">✓</span><span>Grow your Real E-state business on BuySellGhar.com.</span></li>
+        </ul>
+        <a href="{{ panel_route('login.register') }}" class="register-btn">Register for Free</a>
       </div>
-      <div class="login-wrap">
-        <div class="card login-content">
-            <div class="card-header">
-              <h3 class="fw-bold text-center">{{ __('panel/login.login_index') }}</h3>
+      <div class="panel right-panel ">
+        <form action="{{ panel_route('login.store') }}" method="post">
+          @csrf
+          <h1>{{ __('panel/login.login_index') }}</h1>
+
+          <div class="form-group">
+            <label for="email-input">{{ __('panel/login.email') }}</label>
+            <input type="text" name="email" id="email-input" value="{{ old('email', $admin_email ?? '') }}"  placeholder="{{ __('panel/login.email') }}">
+            @error('email')
+            <div class="invalid-feedback d-block">{{ $message }}</div>
+            @enderror
+          </div>
+
+          <div class="form-group ">
+            <label for="password-input">{{ __('panel/login.password') }}</label>
+            <div class="password-wrap">
+                <input type="password" name="password" id="password-input" value="{{ old('password', $admin_password ?? '') }}" placeholder="{{ __('panel/login.password') }}" />
+                <span class="show-text">Show</span>
+                @error('password')
+                <div class="invalid-feedback d-block">{{ $message }}</div>
+                @enderror
             </div>
+            <div class="forgot"><a href="{{ panel_route('login.store') }}" >Forgot Password?</a></div>
+          </div>
 
-            <div class="card-body">
-              <form action="{{ panel_route('login.store') }}" method="post">
-                @csrf
-
-                <div class="form-floating mb-4">
-                  <input type="text" name="email" class="form-control" id="email-input" value="{{ old('email', $admin_email ?? '') }}" placeholder="{{ __('common.email') }}">
-                  <label for="email-input">{{ __('panel/login.email') }}</label>
-                  @error('email')
-                    <div class="invalid-feedback d-block">{{ $message }}</div>
-                  @enderror
-                </div>
-
-                <div class="form-floating mb-5">
-                  <input type="password" name="password" class="form-control" id="password-input" value="{{ old('password', $admin_password ?? '') }}" placeholder="{{ __('shop/login.password') }}">
-                  <label for="password-input">{{ __('panel/login.password') }}</label>
-                  @error('password')
-                    <div class="invalid-feedback d-block">{{ $message }}</div>
-                  @enderror
-                </div>
-
-                @if (session('error'))
-                  <div class="alert alert-danger">
-                    {{ session('error') }}
-                  </div>
-                @endif
-
-                <div class="d-grid mb-4"><button type="submit" class="btn btn-lg btn-primary">{{ __('panel/common.btn_submit') }}</button></div>
-              </form>
-            </div>
-        </div>
-        <p class="text-center text-secondary mt-5">
-          {!! innoshop_brand_link() !!}
-          {{ innoshop_version() }} &copy; {{ date('Y') }} All Rights Reserved
-        </p>
+          @if (session('error'))
+          <div class="alert alert-danger">
+            {{ session('error') }}
+          </div>
+          @endif
+          <div class="d-grid mb-4"><button type="submit" class="login-btn">{{ __('panel/common.btn_submit') }}</button></div>
+        </form>
       </div>
-
+    </div>
+    <div class="login-wrap">
+      <p class="text-center text-secondary mt-5">
+        {{ config('app.name') }}&copy; {{ date('Y') }} All Rights Reserved
+      </p>
     </div>
   </div>
 </body>

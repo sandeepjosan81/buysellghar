@@ -73,7 +73,7 @@
       </div>
     </div>
   </div>
-
+  <?php /*
   <!-- Price filter -->
   <div class="card mb-4 shadow-sm border-0">
     <div class="card-header bg-light border-0">
@@ -128,6 +128,7 @@
   </div>
   @endif
 
+
   <!-- Attribute filter -->
   @if(isset($attributes) && count($attributes) > 0)
   @foreach ($attributes as $attribute)
@@ -175,6 +176,8 @@
       </div>
     </div>
   </div>
+
+  */ ?>
 
   <!-- Clear filters -->
   <div class="d-grid">

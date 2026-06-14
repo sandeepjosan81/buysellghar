@@ -12,6 +12,7 @@ use InnoShop\Common\Models\Customer\Favorite;
 use InnoShop\Common\Models\Order\Item;
 use InnoShop\Common\Models\Product\Relation;
 use InnoShop\Common\Models\Product\Sku;
+use InnoShop\Common\Models\Product\PropertyProps;
 use InnoShop\Common\Traits\HasPackageFactory;
 use InnoShop\Common\Traits\Replicate;
 use InnoShop\Common\Traits\Translatable;
@@ -27,7 +28,7 @@ class Product extends BaseModel
     const TYPE_BUNDLE = 'bundle';
 
     protected $fillable = [
-        'type', 'brand_id', 'images', 'hover_image', 'video', 'price', 'tax_class_id', 'spu_code', 'slug', 'is_virtual', 'variables', 'position',
+        'type', 'brand_id', 'admin_id','images', 'hover_image', 'video', 'price', 'tax_class_id', 'spu_code', 'slug', 'is_virtual', 'variables', 'position',
         'spu_code', 'active', 'weight', 'weight_class', 'sales', 'viewed','is_today_deal', 'is_hot_deal','is_featured'
     ];
 
@@ -48,6 +49,12 @@ class Product extends BaseModel
     {
         return $this->belongsTo(Brand::class, 'brand_id');
     }
+
+        public function propertyProps(): HasOne
+    {
+        return $this->hasOne(PropertyProps::class, 'product_id', 'id');
+    }
+
 
     /**
      * @return HasOne
@@ -163,34 +170,25 @@ class Product extends BaseModel
         return $this->belongsToMany(Customer::class, 'customer_favorites', 'product_id', 'customer_id');
     }
 
-    /**
-     * 获取产品的选项关联
-     */
+  
     public function productOptions(): HasMany
     {
         return $this->hasMany(\InnoShop\Common\Models\Product\Option::class, 'product_id', 'id');
     }
 
-    /**
-     * 获取产品的选项值配置
-     */
+  
     public function productOptionValues(): HasMany
     {
         return $this->hasMany(\InnoShop\Common\Models\Product\OptionValue::class, 'product_id', 'id');
     }
 
-    /**
-     * 获取产品关联的所有选项（通过产品选项值配置）
-     */
     public function options(): BelongsToMany
     {
         return $this->belongsToMany(Option::class, 'product_options', 'product_id', 'option_id')
             ->distinct();
     }
 
-    /**
-     * 获取产品关联的所有选项值（通过产品选项值配置）
-     */
+    
     public function optionValues(): BelongsToMany
     {
         return $this->belongsToMany(OptionValue::class, 'product_option_values', 'product_id', 'option_value_id')
@@ -307,10 +305,9 @@ class Product extends BaseModel
     }
 
     /**
-     * 获取hover图片URL
      *
-     * @param  int  $width  图片宽度
-     * @param  int  $height  图片高度
+     * @param  int  $width  
+     * @param  int  $height  
      * @return string
      * @throws Exception
      */
@@ -323,8 +320,7 @@ class Product extends BaseModel
         return image_resize($this->hover_image, $width, $height);
     }
 
-    /**
-     * 检查是否有hover图片
+    /** 
      *
      * @return bool
      */

@@ -25,7 +25,7 @@
           @endforeach
         </select>
       </div>
-      <div class="order-item">
+      <!-- <div class="order-item">
         <label href="javascript:void(0)" class="order-icon {{ !request('style_list') || request('style_list') == 'grid' ? 'active' : ''}}">
           <i class="bi bi-grid"></i>
           <input class="d-none" value="grid" type="radio" name="style_list">
@@ -35,7 +35,7 @@
           <i class="bi bi-list"></i>
           <input class="d-none" value="list" type="radio" name="style_list">
         </label>
-      </div>
+      </div> -->
     </div>
   </div>
 </div>

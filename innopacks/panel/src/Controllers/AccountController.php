@@ -29,7 +29,7 @@ class AccountController extends BaseController
     {
         try {
             $admin = current_admin();
-            AdminRepo::getInstance()->update($admin, $request->only('name', 'email', 'password'));
+            AdminRepo::getInstance()->update($admin, $request->only('whatsapp_no', 'name', 'email', 'password'));
 
             return redirect(panel_route('account.index'))
                 ->with('instance', $admin)

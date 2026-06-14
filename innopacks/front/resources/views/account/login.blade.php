@@ -31,7 +31,7 @@
         @endif
 
         <div class="btn-submit">
-          <button type="button" class="btn btn-primary form-submit btn-lg">{{ __('front/login.login_submit') }}</button>
+          <button type="button" class="btn btn-primary-btn fw-semibold custom-login btn-lg">{{ __('front/login.login_submit') }}</button>
           <a href="{{ front_route('register.index') }}{{ request('iframe') ? '?iframe=true' : '' }}">{{
           __('front/login.no_account') }}
             <i class="bi bi-arrow-up-right-square"></i></a>

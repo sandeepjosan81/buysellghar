@@ -20,6 +20,7 @@ return [
     'bulk'                         => 'Batch',
     'cancel'                       => 'Cancel',
     'category'                     => 'Category',
+    'listing_type'                 => 'Listing Type',
     'clear_selection'              => 'Clear Selection',
     'close'                        => 'Close',
     'collapse'                     => 'Collapse',
@@ -74,7 +75,7 @@ return [
     'please_choose'                => 'Please Choose',
     'position'                     => 'Position',
     'preview'                      => 'Preview',
-    'product_count'                => 'Product Count',
+    'product_count'                => 'Property Count',
     'read_success'                 => 'Read successfully',
     'reset'                        => 'Reset',
     'save'                         => 'Save',
@@ -110,4 +111,5 @@ return [
     'is_today_deal'                => 'Is Today Deal',
     'is_hot_deal'                  => 'Is Hot Deal',
     'is_featured'                  => 'Is Featured',
+    'whatsapp_no'                  => 'WhatsApp Number',
 ];
