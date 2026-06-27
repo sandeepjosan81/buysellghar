@@ -348,7 +348,7 @@
     <div class="wrapper">
       <div class="panel left-panel">
         <div class="header-logo-r d-flex justify-content-center mb-4">
-          <a href="#" class="register-sidebar-logo">
+          <a href="{{ front_route('home.index') }}" class="register-sidebar-logo">
             <img src="{{ image_origin(system_setting('panel_logo', 'images/logo-panel.png')) }}" class="img-fluid register" alt="Logo">
           </a>
         </div>
@@ -377,12 +377,12 @@
             <label for="password-input">{{ __('panel/login.password') }}</label>
             <div class="password-wrap">
                 <input type="password" name="password" id="password-input" value="{{ old('password', $admin_password ?? '') }}" placeholder="{{ __('panel/login.password') }}" />
-                <span class="show-text">Show</span>
+                <span class="show-text toggle-password">Show</span>
                 @error('password')
                 <div class="invalid-feedback d-block">{{ $message }}</div>
                 @enderror
             </div>
-            <div class="forgot"><a href="{{ panel_route('login.store') }}" >Forgot Password?</a></div>
+            <div class="forgot"><a href="{{ panel_route('password.email') }}" >Forgot Password?</a></div>
           </div>
 
           @if (session('error'))
@@ -400,5 +400,24 @@
       </p>
     </div>
   </div>
+ <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const toggleButtons = document.querySelectorAll('.toggle-password');
+    
+        toggleButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                const input = this.previousElementSibling;
+    
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    this.textContent = 'Hide';
+                } else {
+                    input.type = 'password';
+                    this.textContent = 'Show';
+                }
+            });
+        });
+    });
+  </script>
 </body>
 </html>

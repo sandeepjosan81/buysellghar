@@ -15,12 +15,17 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Auth\MustVerifyEmail as MustVerifyEmailTrait;
 
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use InnoShop\Panel\Notifications\AdminResetPasswordNotification;
 
-class Admin extends AuthUser implements MustVerifyEmail
+
+class Admin extends AuthUser implements MustVerifyEmail, CanResetPasswordContract
 {
     use MustVerifyEmailTrait;
 
     use HasApiTokens, HasFactory, HasRoles, Notifiable;
+    use Notifiable, CanResetPassword;
 
     protected $fillable = [
         'name', 'email', 'password', 'locale', 'active', 'whatsapp_no',
@@ -63,5 +68,10 @@ class Admin extends AuthUser implements MustVerifyEmail
         } else {
             $this->notifyNow(new ForgottenNotification($this, $code));
         }
+    }
+    
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new AdminResetPasswordNotification($token));
     }
 }

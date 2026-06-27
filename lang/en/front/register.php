@@ -7,4 +7,5 @@ return [
     'register_submit'  => 'Register now',
     'have_account'     => 'Already have an account? log in',
     'register_success' => 'Register successfully.',
+    'verify_otp'              => ' Verify OTP'
 ];

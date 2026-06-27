@@ -63,4 +63,5 @@ return [
     'contact_no' => 'Contact No.',
     'interested_in' => 'Interested In',
     'btn_submit' => 'Submit',
+    'post_text_mobile' => 'Post Property',
 ];

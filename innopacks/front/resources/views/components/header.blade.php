@@ -132,13 +132,15 @@
             </a>
           </div>
           <div>
-            <ul class="mobile-cart-icon">
-              <li>
+            <ul class="mobile-cart-icon mb-1">
+                <li><div class="post-property"><a href="{{ panel_route('products.create') }}" class="contact-btn-mob">{{ __('front/common.post_text_mobile') }}</a></div> </li>
+              <!-- <li>
+                
                 <a href="{{ account_route('favorites.index') }}" class="header-icon-btn" aria-label="Wishlist">
                   <img src="{{ asset('images/icons/love.svg') }}" class="img-fluid">
                   <span class="icon-quantity">{{ $favTotal }}</span>
                 </a>
-              </li>
+              </li> -->
             </ul>
           </div>
 

@@ -9,11 +9,36 @@ Route::post('login', [Controllers\LoginController::class, 'store'])->name('login
 Route::get('register', [Controllers\LoginController::class, 'register'])->name('login.register');
 Route::post('store-seller', [Controllers\LoginController::class, 'store_seller'])->name('login.store_seller');
 
+
+Route::get('/register/verify/{id}', [Controllers\LoginController::class, 'verifyForm'])->name('register.verify');
+Route::post('/register/verify-otp', [Controllers\LoginController::class, 'verify_otp'])->name('register.verify_otp');
+Route::post('/register/resend-otp/{id}', [Controllers\LoginController::class, 'resend_otp'])->name('register.resend_otp');
+
+Route::get('/send-sms', [Controllers\LoginController::class, 'sendSms'])->name('register.sendSms'); 
+
+// Forgot password form
+Route::get('/forgot-password', [Controllers\AdminForgotPasswordController::class, 'showLinkRequestForm'])
+    ->name('password.request');
+
+// Send reset link
+Route::post('/forgot-password', [Controllers\AdminForgotPasswordController::class, 'sendResetLinkEmail'])
+    ->name('password.email');
+
+// Reset password form
+Route::get('/reset-password/{token}', [Controllers\AdminResetPasswordController::class, 'showResetForm'])
+    ->name('password.reset');
+
+// Save new password
+Route::post('/reset-password', [Controllers\AdminResetPasswordController::class, 'reset'])
+    ->name('password.update');
+
+
 Route::middleware(['admin_auth:admin'])
     ->group(function () {
         Route::get('logout', [Controllers\LogoutController::class, 'index'])->name('logout.index');
 
-        Route::get('/', [Controllers\DashboardController::class, 'index'])->name('dashboard.index');
+                // Route::get('/', [Controllers\DashboardController::class, 'index'])->name('dashboard.index');
+        Route::get('/', [Controllers\ProductController::class, 'index']);
 
         Route::get('/locale/{code}', [Controllers\LocaleController::class, 'switch'])->name('locale.switch');
 
@@ -147,4 +172,5 @@ Route::middleware(['admin_auth:admin'])
 
         Route::get('/file_manager', [InnoShop\RestAPI\PanelApiControllers\FileManagerController::class, 'index'])->name('file_manager.index');
         Route::get('/file_manager/iframe', [InnoShop\RestAPI\PanelApiControllers\FileManagerController::class, 'iframe'])->name('file_manager.iframe');
+    
     });

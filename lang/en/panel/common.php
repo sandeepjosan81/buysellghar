@@ -112,4 +112,6 @@ return [
     'is_hot_deal'                  => 'Is Hot Deal',
     'is_featured'                  => 'Is Featured',
     'whatsapp_no'                  => 'WhatsApp Number',
+    'otp' => 'OTP',
+    'send_reset_link'              => 'Send Reset Link'
 ];

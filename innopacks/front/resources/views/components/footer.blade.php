@@ -13,7 +13,7 @@
               </div>
               <div class="about-text footer-item-content">
                 <p>
-                  <b>{{ system_setting_locale('meta_description', '') }}</b>
+                  {{ system_setting_locale('meta_description', '') }}
                 </p>
               </div>
             </div>

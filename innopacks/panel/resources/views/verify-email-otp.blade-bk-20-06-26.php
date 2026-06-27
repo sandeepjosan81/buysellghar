@@ -357,9 +357,9 @@
 <body class="page-login1">
   <div class="row d-flex justify-content-center pt-4">
     <div class="wrapper">
-      <div class="panel left-panel">
+      <!-- <div class="panel left-panel">
         <div class="header-logo-r d-flex justify-content-center mb-4">
-          <a href="{{ front_route('home.index') }}" class="register-sidebar-logo">
+          <a href="#" class="register-sidebar-logo">
             <img src="{{ image_origin(system_setting('panel_logo', 'images/logo-panel.png')) }}" class="img-fluid register" alt="Logo">
           </a>
         </div>
@@ -370,45 +370,16 @@
           <li><span class="check">✓</span><span>Grow your property business on BuySellGhar.com.</span></li>
         </ul>
         <a href="#" class="register-btn">Login here</a>
-      </div>
+      </div> -->
       <div class="panel right-panel mb-2">
-        <form class="needs-validation" novalidate id="app-form" action="{{ panel_route('login.store_seller') }}" method="POST">
+        <form class="needs-validation" novalidate id="app-form" action="{{ panel_route('register.verify.otp') }}" method="POST">
           @csrf
           @method('POST')
-          <h1>Register</h1>
-
+          <h1>OTP Verification</h1>
           <div class="form-group mb-3">
-            <label for="name-input">{{ __('panel/register.name') }}</label>
-            <input type="text" name="name" id="name-input" value="{{ old('name') }}" placeholder="{{ __('panel/register.name') }}">
-            @error('name')
-            <div class="invalid-feedback d-block">{{ $message }}</div>
-            @enderror
-          </div>
-
-          <div class="form-group mb-3">
-            <label for="email-input">{{ __('panel/register.email') }}</label>
-            <input type="text" name="email" id="email-input" value="{{ old('email') }}" placeholder="{{ __('panel/register.email') }}">
-            @error('email')
-            <div class="invalid-feedback d-block">{{ $message }}</div>
-            @enderror
-          </div>
-
-          <div class="form-group mb-3">
-            <label for="password-input">{{ __('panel/register.password') }}</label>
-            <div class="password-wrap">
-              <input type="password" name="password" id="password-input" value="{{ old('password') }}" placeholder="{{ __('panel/register.password') }}" />
-              <span class="show-text">Show</span>
-              @error('password')
-              <div class="invalid-feedback d-block">{{ $message }}</div>
-              @enderror
-            </div>
-          </div>
-
-          <div class="form-group mb-3">
-            <label for="whatsapp_no"><i class="bi bi-whatsapp p-1"></i>{{ __('panel/register.whatsapp_no') }}</label>
-            <input type="text" name="whatsapp_no" id="whatsapp_no"  minlength="10"
-       maxlength="15" value="{{ old('whatsapp_no') }}" placeholder="{{ __('panel/register.whatsapp_no') }}">
-            @error('whatsapp_no')
+            <label for="name-input">{{ __('panel/register.verify_otp') }}</label>
+            <input type="text" name="otp" id="name-input" value="{{ old('otp') }}" placeholder="{{ __('panel/register.verify_otp') }}">
+            @error('otp')
             <div class="invalid-feedback d-block">{{ $message }}</div>
             @enderror
           </div>
@@ -419,8 +390,7 @@
           </div>
           @endif
 
-          <input type="hidden" name="locale" value="en">
-          <input type="hidden" name="roles[]" value="1">
+          <input type="hidden" name="admin_id" value="{{ $admin->id }}">
           <div class="d-grid mb-4"><button type="submit" class="login-btn">{{ __('panel/common.btn_submit') }}</button></div>
         </form>
       </div>
@@ -433,3 +403,5 @@
   </div>
 </body>
 </html>
+
+

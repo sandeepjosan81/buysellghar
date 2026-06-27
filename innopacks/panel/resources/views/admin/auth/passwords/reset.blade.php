@@ -5,9 +5,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <base href="{{ panel_route('home.index') }}">
-  <title>@yield('title', __('panel/register.title'))</title>
-  <meta name="keywords" content="@yield('keywords', __('panel/register.keywords'))">
-  <meta name="description" content="@yield('description', __('panel/register.description'))">
+  <title>@yield('title', __('panel/login.reset_password'))</title>
+  <meta name="keywords" content="@yield('keywords', __('panel/login.keywords'))">
+  <meta name="description" content="@yield('description', __('panel/login.description'))">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}">
   <link rel="stylesheet" href="{{ mix('build/panel/css/bootstrap.css') }}">
@@ -17,7 +17,7 @@
   <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
   <script src="{{ asset('vendor/layer/3.5.1/layer.js') }}"></script>
   @stack('header')
-  <style>
+   <style>
     * {
       margin: 0;
       padding: 0;
@@ -104,7 +104,7 @@
     .register-btn {
       display: inline-block;
       padding: 14px 44px;
-      border: 1px solid #d9a234;
+       border: 1px solid #d9a234;
       color: #DB9200;
       background: #fff;
       border-radius: 2px;
@@ -136,7 +136,7 @@
 
     input {
       width: 100%;
-      height: 45px;
+      height: 55px;
       border: 1px solid #d9dde7;
       outline: none;
       padding: 0 14px;
@@ -342,94 +342,95 @@
       }
     }
   </style>
-  <script>
-    $(document).ready(function() {
-      $('.show-text').on('click', function() {
-        const passwordInput = $('#password-input');
-        const type = passwordInput.attr('type') === 'password' ? 'text' : 'password';
-        passwordInput.attr('type', type);
-        $(this).text(type === 'password' ? 'Show' : 'Hide');
-      });
-    });
-  </script>
 </head>
-
-<body class="page-login1">
-  <div class="row d-flex justify-content-center pt-4">
+<body class="page-login1 mt-4">
+  <div class="row d-flex justify-content-center pt-5">
     <div class="wrapper">
       <div class="panel left-panel">
         <div class="header-logo-r d-flex justify-content-center mb-4">
-          <a href="{{ front_route('home.index') }}" class="register-sidebar-logo">
+          <a href="#" class="register-sidebar-logo">
             <img src="{{ image_origin(system_setting('panel_logo', 'images/logo-panel.png')) }}" class="img-fluid register" alt="Logo">
           </a>
         </div>
         <ul class="features">
-          <li><span class="check">✓</span><span>Create post ads on BuySellGhar Seller profile.</span></li>
-          <li><span class="check">✓</span><span>Get relevant business leads.</span></li>
-          <li><span class="check">✓</span><span>Schedule visit with clients.</span></li>
-          <li><span class="check">✓</span><span>Grow your property business on BuySellGhar.com.</span></li>
+          <li><span class="check">✓</span><span>Reset password on BuySellGhar Seller profile.</span></li>
+          <li><span class="check">✓</span><span>Grow your Real E-state business on BuySellGhar.com.</span></li>
         </ul>
-        <a href="#" class="register-btn">Login here</a>
+        <a href="{{ panel_route('login.index') }}" class="register-btn">Login Here</a>
       </div>
-      <div class="panel right-panel mb-2">
-        <form class="needs-validation" novalidate id="app-form" action="{{ panel_route('login.store_seller') }}" method="POST">
+      <div class="panel right-panel ">
+        
+        <form action="{{ panel_route('password.update') }}" method="post">
           @csrf
-          @method('POST')
-          <h1>Register</h1>
+          <input type="hidden" name="token" value="{{ $token }}">
+          <h1>{{ __('panel/login.reset_password') }}</h1>
 
-          <div class="form-group mb-3">
-            <label for="name-input">{{ __('panel/register.name') }}</label>
-            <input type="text" name="name" id="name-input" value="{{ old('name') }}" placeholder="{{ __('panel/register.name') }}">
-            @error('name')
-            <div class="invalid-feedback d-block">{{ $message }}</div>
-            @enderror
-          </div>
-
-          <div class="form-group mb-3">
-            <label for="email-input">{{ __('panel/register.email') }}</label>
-            <input type="text" name="email" id="email-input" value="{{ old('email') }}" placeholder="{{ __('panel/register.email') }}">
+          <div class="form-group">
+            <label for="email-input">{{ __('panel/login.email') }}</label>
+            <input type="email" name="email" id="email-input" value="{{ old('email', $email ?? '') }}"  placeholder="{{ __('panel/login.email') }}" required>
             @error('email')
             <div class="invalid-feedback d-block">{{ $message }}</div>
             @enderror
           </div>
 
-          <div class="form-group mb-3">
-            <label for="password-input">{{ __('panel/register.password') }}</label>
-            <div class="password-wrap">
-              <input type="password" name="password" id="password-input" value="{{ old('password') }}" placeholder="{{ __('panel/register.password') }}" />
-              <span class="show-text">Show</span>
-              @error('password')
-              <div class="invalid-feedback d-block">{{ $message }}</div>
-              @enderror
+            <div class="form-group ">
+                <label for="password-input">{{ __('panel/login.new_password') }}</label>
+                <div class="password-wrap">
+                    <input type="password" name="password" id="password-input" value="{{ old('password', $password ?? '') }}" placeholder="{{ __('panel/login.new_password') }}" required />
+                    <span class="show-text toggle-password">Show</span>
+                    @error('password')
+                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                    @enderror
+                </div>           
             </div>
-          </div>
-
-          <div class="form-group mb-3">
-            <label for="whatsapp_no"><i class="bi bi-whatsapp p-1"></i>{{ __('panel/register.whatsapp_no') }}</label>
-            <input type="text" name="whatsapp_no" id="whatsapp_no"  minlength="10"
-       maxlength="15" value="{{ old('whatsapp_no') }}" placeholder="{{ __('panel/register.whatsapp_no') }}">
-            @error('whatsapp_no')
-            <div class="invalid-feedback d-block">{{ $message }}</div>
-            @enderror
-          </div>
+            <div class="form-group ">
+                <label for="password-input">{{ __('panel/login.confirm_password') }}</label>
+                <div class="password-wrap">
+                    <input type="password" name="password_confirmation" id="password-input" value="{{ old('password_confirmation', $password_confirmation ?? '') }}" placeholder="{{ __('panel/login.confirm_password') }}" required />
+                    <span class="show-text toggle-password">Show</span>
+                    @error('password_confirmation')
+                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                    @enderror
+                </div>           
+            </div>
 
           @if (session('error'))
           <div class="alert alert-danger">
             {{ session('error') }}
           </div>
           @endif
-
-          <input type="hidden" name="locale" value="en">
-          <input type="hidden" name="roles[]" value="1">
           <div class="d-grid mb-4"><button type="submit" class="login-btn">{{ __('panel/common.btn_submit') }}</button></div>
         </form>
       </div>
     </div>
-    <div class="login-wrap">
-      <p class="text-center text-secondary mt-5">
-        {{ config('app.name') }}&copy; {{ date('Y') }} All Rights Reserved
-      </p>
+
+
+<div class="form-group">
+    <label for="password_confirmation">{{ __('panel/login.confirm_password') }}</label>
+    <div class="password-wrap">
+        <input type="password" name="password_confirmation" id="password_confirmation" placeholder="{{ __('panel/login.confirm_password') }}" required>
+        <span class="show-text toggle-password">Show</span>
     </div>
-  </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const toggleButtons = document.querySelectorAll('.toggle-password');
+    
+        toggleButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                const input = this.previousElementSibling;
+    
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    this.textContent = 'Hide';
+                } else {
+                    input.type = 'password';
+                    this.textContent = 'Show';
+                }
+            });
+        });
+    });
+  </script>
 </body>
 </html>

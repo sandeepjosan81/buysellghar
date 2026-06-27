@@ -7,7 +7,7 @@
   <base href="{{ front_route('home.index') }}">
   <title>@yield('title', system_setting_locale('meta_title', 'BuySellGhar Online Ecommerce platform '))</title>
   <meta name="description" content="@yield('description', system_setting_locale('meta_description', 'BuySellGhar is an innovative open-source e-commerce platform developed based on Laravel 12, featuring multi-language and multi-currency support. It adopts a powerful and flexible plugin architecture based on Hooks, providing users with rich customization and extension functions. Welcome to experience BuySellGhar and build your own e-commerce platform!'))">
-  <meta name="keywords" content="@yield('keywords', system_setting_locale('meta_keywords', 'BuySellGhar, innovation, open source, e-commerce, cross-border e-commerce, open source independent website, Laravel 12, multi-language, multi-currency, Hook, plugin architecture, flexible, powerful'))">
+  <meta name="keywords" content="@yield('keywords', system_setting_locale('meta_keywords', 'BuySellGhar'))">
   <meta name="generator" content="BuySellGhar">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <meta name="api-token" content="{{ session('front_api_token') }}">
@@ -39,7 +39,7 @@
     */ 
   ?>  
   <link rel="stylesheet" href="{{ mix('build/front/css/fonts/bootstrap-icons.min.css') }}">
-  <link rel="stylesheet" href="{{ mix('build/front/css/landing.css') }}">
+  <link rel="stylesheet" href="{{ mix('build/front/css/landing.css?v=1.1') }}">
   <link rel="stylesheet" href="{{ mix('build/front/css/landing-template2.css') }}">  
   
   <link rel="stylesheet" href="{{ mix('build/front/css/app.css') }}">  
@@ -78,8 +78,8 @@
   <meta name="robots" content="index, follow">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-  <meta property="og:title" content="Buy Premium Products Online">
-  <meta property="og:description" content="Best quality products at affordable price. Shop now!">
+  <meta property="og:title" content="BuySellGhar - Property Listing Platform Buy | Sell | Rent | Real Estate">
+  <meta property="og:description" content="BuySellGhar.com makes it easy for buyers and sellers to find each other. BuySellGhar.com is a tool for people who are looking for a new place to live. BuySellGhar.com has homes for sale and rent so people can find the one that is right, for them.">
   <meta property="og:image" content="{{ asset('images/shoes.jpg') }}">
   <?php /* <meta property="og:url" content="{{ front_route('products.show', ['id' => $product->id]) }}"> */ ?>
 
