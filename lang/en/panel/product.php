@@ -171,7 +171,7 @@ return [
     'open_side'=> 'Open Side',    
     'plot_length'=> 'Plot Length',
     'plot_breadth'=> 'Plot Breadth',
-    'plot_area'=> 'Plot Area',
+    'plot_area'=> 'Land Area',
     'plot_area_type'=> 'Plot Area Type',
     'covered_area'=> 'Covered Area',
     'covered_area_type'=> 'Covered Area Type',

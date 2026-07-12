@@ -3,6 +3,39 @@
 @endpush
 
 <div class="filter-sidebar" id="filterSidebar">
+    <!-- Price filter -->
+  <!-- <div class="card mb-4 shadow-sm border-0">
+    <div class="card-header bg-light border-0">
+      <h6 class="mb-0 text-dark fw-semibold">{{ __('front/product.price') }}</h6>
+    </div>
+    <div class="card-body">
+      <div class="mb-3 d-flex flex-column">
+        <div class="price-inputs-container">
+          <div class="row g-2">
+            <div class="col">
+              <label class="form-label small">{{ __('front/product.from') }}</label>
+              <input type="number" class="form-control form-control-sm" id="minPrice" placeholder="0" value="{{ $price_filters['min_price'] }}">
+            </div>
+            <div class="col">
+              <label class="form-label small">{{ __('front/product.to') }}</label>
+              <input type="number" class="form-control form-control-sm" id="maxPrice" placeholder="1000" value="{{ $price_filters['max_price'] }}">
+            </div>
+          </div>
+        </div>
+        
+        <div class="dual-range-slider">
+          <div class="slider-track"></div>
+          <div class="slider-range"></div>
+          <div class="slider-thumb slider-thumb-min" data-thumb="min"></div>
+          <div class="slider-thumb slider-thumb-max" data-thumb="max"></div>
+        </div>
+        
+        <button type="button" class="btn btn-primary btn-sm w-100" onclick="filterByPrice()">
+          {{ __('front/product.filter') }}
+        </button>
+      </div>
+    </div>
+  </div> -->
   <!-- Category filter -->
   <div class="card mb-4 shadow-sm border-0">
     <div class="card-header bg-light border-0">
@@ -73,41 +106,9 @@
       </div>
     </div>
   </div>
-  <?php /*
-  <!-- Price filter -->
-  <div class="card mb-4 shadow-sm border-0">
-    <div class="card-header bg-light border-0">
-      <h6 class="mb-0 text-dark fw-semibold">{{ __('front/product.price') }}</h6>
-    </div>
-    <div class="card-body">
-      <div class="mb-3 d-flex flex-column">
-        <div class="price-inputs-container">
-          <div class="row g-2">
-            <div class="col">
-              <label class="form-label small">{{ __('front/product.from') }}</label>
-              <input type="number" class="form-control form-control-sm" id="minPrice" placeholder="0" value="{{ $price_filters['min_price'] }}">
-            </div>
-            <div class="col">
-              <label class="form-label small">{{ __('front/product.to') }}</label>
-              <input type="number" class="form-control form-control-sm" id="maxPrice" placeholder="1000" value="{{ $price_filters['max_price'] }}">
-            </div>
-          </div>
-        </div>
-        
-        <div class="dual-range-slider">
-          <div class="slider-track"></div>
-          <div class="slider-range"></div>
-          <div class="slider-thumb slider-thumb-min" data-thumb="min"></div>
-          <div class="slider-thumb slider-thumb-max" data-thumb="max"></div>
-        </div>
-        
-        <button type="button" class="btn btn-primary btn-sm w-100" onclick="filterByPrice()">
-          {{ __('front/product.filter') }}
-        </button>
-      </div>
-    </div>
-  </div>
 
+
+  <?php /*
   <!-- Brand filter -->
   @if(isset($brands) && count($brands) > 0)
   <div class="card mb-4 shadow-sm border-0">

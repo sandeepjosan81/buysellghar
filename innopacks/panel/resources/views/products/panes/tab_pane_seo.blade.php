@@ -1,9 +1,10 @@
 <div class="tab-pane fade mt-3" id="seo-tab-pane" role="tabpanel" aria-labelledby="seo-tab"
      tabindex="4">
-  <x-common-form-input :title="__('panel/common.slug')" name="slug" :value="old('slug', $product->slug ?? '')"
+  <?php /* <x-common-form-input :title="__('panel/common.slug')" name="slug" :value="old('slug', $product->slug ?? '')"
                        :placeholder="__('panel/common.slug')"
                        column="product_slug" :generate="true"
                        description="{{ __('panel/common.slug_description') }}"/>
+                     */  ?>
 
   <ul class="nav nav-tabs mt-3" id="seo-myTab" role="tablist">
     @foreach (locales() as $locale)

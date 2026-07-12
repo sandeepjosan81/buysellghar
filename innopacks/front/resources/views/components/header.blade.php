@@ -250,6 +250,20 @@
                             </select>
                         </div>
                         <div class="col-6 col-md-2  g-3">
+                            <select name="property_for" id="propertyForSelect" class="form-search-select w-100">
+                                <option value="">Select Sale/Rent</option>
+                                @foreach ($forSailRent as $key=>$sr)
+                                    <option value="{{ $key }}"  {{ old('property_for', request('property_for')) === $key ? 'selected' : '' }} >{{ $sr }}</option>
+                                @endforeach
+                            </select>
+                        </div>  
+                        <div class="col-12 col-md-1">
+                            <button type="submit" class="btn-primary-btn-search w-100 fw-semibold h35 mt-3">
+                                Search
+                            </button>
+                        </div> 
+                        <?php /*  
+                        <div class="col-6 col-md-2  g-3">
                             <select name="possession_status" class="form-search-select w-100" id="possessionSelect">
                                 <option value="">Possession Status</option>
                                 @foreach ($possession as $key=>$p)
@@ -257,8 +271,10 @@
                                 @endforeach
                             </select>
                         </div>
+                       */ ?>
                     </div>
                     <div class="row d-flex justify-content-center pb-2">
+                        <?php /*
                         <div class="col-6 col-md-2  g-3">
                             <select name="property_for" id="propertyForSelect" class="form-search-select w-100">
                                 <option value="">Select Sale/Rent</option>
@@ -321,13 +337,13 @@
                                 @endforeach
                                 
                             </select>
-                        </div>                
+                        </div>              
 
                         <div class="col-12 col-md-1 mt-1 ">
                             <button type="submit" class="btn btn-primary-btn w-100 fw-semibold h35 mt-3">
                                 Search
                             </button>
-                        </div>
+                        </div> */ ?> 
 
                     </div>
                 </form>
@@ -451,11 +467,13 @@
                                 
                             </select>
                         </div>
-
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-primary-btn w-100 fw-semibold">
+                        <div class="col-12">                            
+                            <button type="submit" class="btn-primary-btn-search w-100 fw-semibold">
                                 Search
                             </button>
+                            <!-- <button type="submit" class="btn btn-primary-btn w-100 fw-semibold">
+                                Search
+                            </button> -->
                         </div>
 
                     </div>

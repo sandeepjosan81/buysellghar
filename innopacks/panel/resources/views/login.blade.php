@@ -391,6 +391,10 @@
           </div>
           @endif
           <div class="d-grid mb-4"><button type="submit" class="login-btn">{{ __('panel/common.btn_submit') }}</button></div>
+          <div class="divider">Or</div>
+          <div class="otp-link">Use OTP to Login</div>
+
+    
         </form>
       </div>
     </div>

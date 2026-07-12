@@ -287,8 +287,9 @@
                                                                 <div class="plan-possession">{{ $product->propertyProps->getPossession() }} | {{ ucfirst($product->propertyProps->city) }} </div>
 
                                                                 <div class="plan-footer">
-                                                                <a href="{{ $product->url }}" class="text-decoration-none contact-btn" title="{{ $product->fallbackName() }}" >{{ __('front/common.view_details') }}</a>
-                                                                <button class="contact-btn">☎ Contact</button>
+                                                                <!-- <a href="{{ $product->url }}" class="text-decoration-none contact-btn" title="{{ $product->fallbackName() }}" >{{ __('front/common.view_details') }}</a> -->
+                                                                <!-- <button class="contact-btn">☎ Contact</button> -->
+                                                                <button class="contact-btn custom_contact" data-url="{{ $product->url }}" data-product-id="{{ $product->id }}" data-bs-toggle="modal" data-bs-target="#leadContactModal">☎ Contact</button>
                                                                 </div>
                                                             </div>
                                                         </div>

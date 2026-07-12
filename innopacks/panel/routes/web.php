@@ -37,8 +37,8 @@ Route::middleware(['admin_auth:admin'])
     ->group(function () {
         Route::get('logout', [Controllers\LogoutController::class, 'index'])->name('logout.index');
 
-                // Route::get('/', [Controllers\DashboardController::class, 'index'])->name('dashboard.index');
-        Route::get('/', [Controllers\ProductController::class, 'index']);
+        Route::get('/', [Controllers\DashboardController::class, 'index'])->name('dashboard.index');
+        // Route::get('/products', [Controllers\ProductController::class, 'index']);
 
         Route::get('/locale/{code}', [Controllers\LocaleController::class, 'switch'])->name('locale.switch');
 

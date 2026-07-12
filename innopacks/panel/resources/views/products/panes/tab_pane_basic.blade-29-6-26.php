@@ -2,8 +2,8 @@
      tabindex="0">
      <input type="hidden" name="type" value="{{ old('type', $product->type ?? 'normal') }}">
      
-  <div class="row mb-3">
-      <div class="mb-3 col-12 col-md-4">
+  <div class="row">
+      <div class="mb-3 col-12 col-md-5">
         <div class="mb-1 fs-6">{{ __('panel/product.property_title') }}<span class="text-danger">*</span></div>
         @if(has_translator())
           <div
@@ -32,7 +32,7 @@
           @php($localeCode = $locale->code)
           @php($localeName = $locale->name)
           <div class="input-group mb-2">
-               <input type="text" class="form-control" id="prop_title" name="translations[{{ $localeCode }}][name]"
+               <input type="text" class="form-control" name="translations[{{ $localeCode }}][name]"
                   value="{{ old('translations.' . $localeCode . '.name', $product->translate($localeCode, 'name')) }}"
                   required placeholder="{{ __('panel/product.name') }}" aria-label="{{ $localeName }}"
                   aria-describedby="basic-addon1" data-locale="{{ $localeCode }}">
@@ -42,43 +42,13 @@
           <i class="bi bi-info-circle me-1"></i>{{ __('panel/product.name_required_hint') }}
         </div>
       </div>
-      <?php 
-        /* <div class="col-12 col-md-3">
-            <x-common-form-select :title="__('panel/product.list_type')" name="propertyProps[list_type]"
-                            :value="old('propertyProps.list_type', $product->propertyProps->list_type ?? 0)" :options="$categoryOptions"
-                            key="id" label="name"/>  
-          </div> 
-        */ 
-      ?>
-      <div class="mb-3 col-12 col-md-4">
-      <x-common-form-input :title="__('panel/common.slug')" name="slug" :value="old('slug', $product->slug ?? '')"
-                      :placeholder="__('panel/common.slug')"
-                      column="product_slug" :generate="false"
-                      description="{{ __('panel/common.slug_description') }}"/>
-      </div>     
-      <div class="col-12 col-md-4 plot-area-field">
-            <label>{{ __('panel/product.price') }}</label>
-              <div class="plot-area-input">
-                <input
-                  type="number"
-                  name="propertyProps[price]"
-                  placeholder="{{ __('panel/product.price') }}"
-                  class="plot-area-number"                       
-                  value="{{ old('propertyProps.price', $product->propertyProps->price ?? '') }}"
-                />
-                <select class="plot-area-type" name="propertyProps[price_type]">
-                    @foreach($priceTypeOptions as $value => $label)
-                        <option
-                            value="{{ $label['id'] }}"
-                            {{ old('propertyProps.price_type', $product->propertyProps->price_type ?? '') == $label['id'] ? 'selected' : '' }}>
-                            {{ $label['name'] }}
-                        </option>
-                    @endforeach
-                </select>
-              </div>
-      </div>           
+      <?php /* <div class="col-12 col-md-3">
+          <x-common-form-select :title="__('panel/product.list_type')" name="propertyProps[list_type]"
+                          :value="old('propertyProps.list_type', $product->propertyProps->list_type ?? 0)" :options="$categoryOptions"
+                          key="id" label="name"/>  
+        </div> */ ?>
       
-      <div class="col-12 col-md-3" id="product-category">
+      <div class="col-12 col-md-5" id="product-category">
         <x-panel::form.row title="{{ __('panel/common.listing_type') }}">
           <div class="category-select">
             <el-cascader
@@ -114,163 +84,143 @@
           
         </x-panel::form.row>
       </div>
- 
-      <div class="col-12 col-md-3 form-group mb-3">                 
-                <label class="form-label">{{ __('panel/product.seller_type') }} <span class="text-danger">*</span>:</label>
-                <div class="radio-group">
-                    <div class="form-check">
-                      <label class="radio">
-                        <input class="form-check-input" type="radio" name="propertyProps[seller_type]" id="owner"
-                          value="owner" required {{ old('propertyProps.seller_type', $product->propertyProps->seller_type ?? '') == 'owner' ? 'checked' : '' }}>
-                        <span class="radio-span" for="owner">{{ __('panel/product.owner') }}</span>
-                      </label>
-                    </div>
-                    <div class="form-check">
-                      <label class="radio">
-                      <input class="form-check-input" type="radio" name="propertyProps[seller_type]" id="dealer"
-                        value="dealer" required {{ old('propertyProps.seller_type', $product->propertyProps->seller_type ?? '') == 'dealer' ? 'checked' : '' }}>
-                      <span class="radio-span" for="dealer">
-                        {{ __('panel/product.dealer') }}
-                      </span>
-                      </label>
-                    </div>
-                    <div class="form-check">
-                      <label class="radio">
-                      <input class="form-check-input" type="radio" name="propertyProps[seller_type]" id="builder"
-                        value="builder" required  {{ old('propertyProps.seller_type', $product->propertyProps->seller_type ?? '') == 'builder' ? 'checked' : '' }}>
-                      <span class="radio-span" for="builder">
-                        {{ __('panel/product.builder') }}
-                      </span>
-                      </label>
-                    </div>
-                </div>
-          </div> 
-
-          <div class="col-12 col-md-3 form-group">                 
-                <label class="form-label">{{ __('panel/product.property_for') }}:</label>
-                <div class="radio-group">
-                    <div class="form-check">
-                      <label class="radio">
-                        <input class="form-check-input" type="radio" name="propertyProps[property_for]" id="sale"
-                          value="sale" {{ old('propertyProps.property_for', $product->propertyProps->property_for ?? '') == 'sale' ? 'checked' : '' }}>
-                        <span class="radio-span" for="sale">{{ __('panel/product.sale') }}</span>
-                      </label>
-                    </div>
-                    <div class="form-check">
-                      <label class="radio">
-                      <input class="form-check-input" type="radio" name="propertyProps[property_for]" id="rent"
-                        value="rent" {{ old('propertyProps.property_for', $product->propertyProps->property_for ?? '') == 'rent' ? 'checked' : '' }}>
-                      <span class="radio-span" for="rent">
-                        {{ __('panel/product.rent') }}
-                      </span>
-                      </label>
-                    </div>
-                    <div class="form-check">
-                      <label class="radio">
-                      <input class="form-check-input" type="radio" name="propertyProps[property_for]" id="pg_hostal"
-                        value="pg_hostal"  {{ old('propertyProps.property_for', $product->propertyProps->property_for ?? '') == 'pg_hostal' ? 'checked' : '' }}>
-                      <span class="radio-span" for="pg_hostal">
-                        {{ __('panel/product.pg_hostal') }}
-                      </span>
-                      </label>
-                    </div>
-                </div>
-          </div> 
-          <div class="col-12 col-md-3 form-group">                 
-                <label class="form-label">{{ __('panel/product.possession_status') }}:</label>
-                <div class="radio-group">
-                    <div class="form-check">
-                      <label class="radio">
-                        <input class="form-check-input" type="radio" name="propertyProps[possession_status]" id="ready_to_move"
-                          value="ready_to_move"  {{ old('propertyProps.possession_status', $product->propertyProps->possession_status ?? '') == 'ready_to_move' ? 'checked' : '' }}>
-                        <span class="radio-span" for="ready_to_move">{{ __('panel/product.ready_to_move') }}</span>
-                      </label>
-                    </div>
-                    <div class="form-check">
-                      <label class="radio">
-                      <input class="form-check-input" type="radio" name="propertyProps[possession_status]" id="under_construction"
-                          value="under_construction" {{ old('propertyProps.possession_status', $product->propertyProps->possession_status ?? '') == 'under_construction' ? 'checked' : '' }}>
-                      <span class="radio-span" for="under_construction">
-                        {{ __('panel/product.under_construction') }}
-                      </span>
-                      </label>
-                    </div>
-                </div>
-          </div>
-          <div class="col-12 col-md-3 form-group">                 
-                <label class="form-label">{{ __('panel/product.transaction_type') }}:</label>
-                <div class="radio-group">
-                    <div class="form-check">
-                      <label class="radio">
-                        <input class="form-check-input" type="radio" name="propertyProps[transaction_type]" id="new_property"
-                          value="new_property" {{ old('propertyProps.transaction_type', $product->propertyProps->transaction_type ?? '') == 'new_property' ? 'checked' : '' }}>
-                        <span class="radio-span" for="new_property">{{ __('panel/product.new_property') }}</span>
-                      </label>
-                    </div>
-                    <div class="form-check">
-                      <label class="radio">
-                      <input class="form-check-input" type="radio" name="propertyProps[transaction_type]" id="resale"
-                        value="resale" {{ old('propertyProps.transaction_type', $product->propertyProps->transaction_type ?? '') == 'resale' ? 'checked' : '' }}>
-                      <span class="radio-span" for="resale">
-                        {{ __('panel/product.resale') }}
-                      </span>
-                      </label>
-                    </div>
-                </div>
-          </div> 
-
-          <div class="col-12 col-md-3">
-            <x-common-form-input :title="__('panel/product.city')" name="propertyProps[city]"
-                              value="{{ old('propertyProps.city', $product->propertyProps->city ?? '') }}" />
-          </div>
-          <?php /*
-          <div class="col-12 col-md-3">
-            <x-common-form-input :title="__('panel/product.location')" name="propertyProps[location]"
-                              value="{{ old('propertyProps.location', $product->propertyProps->location ?? '') }}" />
-          </div>
-          */ ?>
-
-          <div class="col-12 col-md-3">
-            <x-common-form-input :title="__('panel/product.address')" name="propertyProps[address]"
-                              value="{{ old('propertyProps.address', $product->propertyProps->address ?? '') }}" />
-          </div>
-         
-                              
-          <div class="col-12 col-md-3 plot-area-field mb-3">
-              <label>{{ __('panel/product.plot_area') }}</label>
-                <div class="plot-area-input">
-                  <input
-                    type="number"
-                    name="propertyProps[plot_area]"
-                    placeholder="{{ __('panel/product.plot_area') }}"
-                    class="plot-area-number"                       
-                    value="{{ old('propertyProps.plot_area', $product->propertyProps->plot_area ?? '') }}"
-                  />
-                  <select class="plot-area-type" name="propertyProps[plot_area_type]">
-                      @foreach($areaTypeOptions as $value => $label)
-                          <option
-                              value="{{ $label['id'] }}"
-                              {{ old('propertyProps.plot_area_type', $product->propertyProps->plot_area_type ?? '') == $label['id'] ? 'selected' : '' }}>
-                              {{ $label['name'] }}
-                          </option>
-                      @endforeach
-                  </select>
-                </div>
-          </div>  
-                  <div class="col-12 col-md-2">
-          <x-common-form-switch-radio :title="__('panel/product.is_corner')" name="is_corner"
-                                  :value="old('is_corner', $product->is_corner ?? false)"/>
-        </div>      
-                
-          
-                
   </div>
 
-  <div class="row" >
-    <div class="col-12" id="additional_fields" style="display: none;" >      
-             
+  <div class="row">
+    <div class="col-12">      
+        <div id="single_price_box1" class="">
+          <div class="row">
+                
+                 <div class="col-12 col-md-3 form-group mb-3">                 
+                      <label class="form-label">{{ __('panel/product.seller_type') }} <span class="text-danger">*</span>:</label>
+                      <div class="radio-group">
+                          <div class="form-check">
+                            <label class="radio">
+                              <input class="form-check-input" type="radio" name="propertyProps[seller_type]" id="owner"
+                                value="owner" required {{ old('propertyProps.seller_type', $product->propertyProps->seller_type ?? '') == 'owner' ? 'checked' : '' }}>
+                              <span class="radio-span" for="owner">{{ __('panel/product.owner') }}</span>
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <label class="radio">
+                            <input class="form-check-input" type="radio" name="propertyProps[seller_type]" id="dealer"
+                              value="dealer" required {{ old('propertyProps.seller_type', $product->propertyProps->seller_type ?? '') == 'dealer' ? 'checked' : '' }}>
+                            <span class="radio-span" for="dealer">
+                              {{ __('panel/product.dealer') }}
+                            </span>
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <label class="radio">
+                            <input class="form-check-input" type="radio" name="propertyProps[seller_type]" id="builder"
+                              value="builder" required  {{ old('propertyProps.seller_type', $product->propertyProps->seller_type ?? '') == 'builder' ? 'checked' : '' }}>
+                            <span class="radio-span" for="builder">
+                              {{ __('panel/product.builder') }}
+                            </span>
+                            </label>
+                          </div>
+                      </div>
+                </div> 
+
+                <div class="col-12 col-md-3 form-group">                 
+                      <label class="form-label">{{ __('panel/product.property_for') }}:</label>
+                      <div class="radio-group">
+                          <div class="form-check">
+                            <label class="radio">
+                              <input class="form-check-input" type="radio" name="propertyProps[property_for]" id="sale"
+                                value="sale" {{ old('propertyProps.property_for', $product->propertyProps->property_for ?? '') == 'sale' ? 'checked' : '' }}>
+                              <span class="radio-span" for="sale">{{ __('panel/product.sale') }}</span>
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <label class="radio">
+                            <input class="form-check-input" type="radio" name="propertyProps[property_for]" id="rent"
+                              value="rent" {{ old('propertyProps.property_for', $product->propertyProps->property_for ?? '') == 'rent' ? 'checked' : '' }}>
+                            <span class="radio-span" for="rent">
+                              {{ __('panel/product.rent') }}
+                            </span>
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <label class="radio">
+                            <input class="form-check-input" type="radio" name="propertyProps[property_for]" id="pg_hostal"
+                              value="pg_hostal"  {{ old('propertyProps.property_for', $product->propertyProps->property_for ?? '') == 'pg_hostal' ? 'checked' : '' }}>
+                            <span class="radio-span" for="pg_hostal">
+                              {{ __('panel/product.pg_hostal') }}
+                            </span>
+                            </label>
+                          </div>
+                      </div>
+                </div> 
+                <div class="col-12 col-md-3 form-group">                 
+                      <label class="form-label">{{ __('panel/product.possession_status') }}:</label>
+                      <div class="radio-group">
+                          <div class="form-check">
+                            <label class="radio">
+                              <input class="form-check-input" type="radio" name="propertyProps[possession_status]" id="ready_to_move"
+                                value="ready_to_move"  {{ old('propertyProps.possession_status', $product->propertyProps->possession_status ?? '') == 'ready_to_move' ? 'checked' : '' }}>
+                              <span class="radio-span" for="ready_to_move">{{ __('panel/product.ready_to_move') }}</span>
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <label class="radio">
+                            <input class="form-check-input" type="radio" name="propertyProps[possession_status]" id="under_construction"
+                                value="under_construction" {{ old('propertyProps.possession_status', $product->propertyProps->possession_status ?? '') == 'under_construction' ? 'checked' : '' }}>
+                            <span class="radio-span" for="under_construction">
+                              {{ __('panel/product.under_construction') }}
+                            </span>
+                            </label>
+                          </div>
+                      </div>
+                </div>
+                <div class="col-12 col-md-3 form-group">                 
+                      <label class="form-label">{{ __('panel/product.transaction_type') }}:</label>
+                      <div class="radio-group">
+                          <div class="form-check">
+                            <label class="radio">
+                              <input class="form-check-input" type="radio" name="propertyProps[transaction_type]" id="new_property"
+                                value="new_property" {{ old('propertyProps.transaction_type', $product->propertyProps->transaction_type ?? '') == 'new_property' ? 'checked' : '' }}>
+                              <span class="radio-span" for="new_property">{{ __('panel/product.new_property') }}</span>
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <label class="radio">
+                            <input class="form-check-input" type="radio" name="propertyProps[transaction_type]" id="resale"
+                              value="resale" {{ old('propertyProps.transaction_type', $product->propertyProps->transaction_type ?? '') == 'resale' ? 'checked' : '' }}>
+                            <span class="radio-span" for="resale">
+                              {{ __('panel/product.resale') }}
+                            </span>
+                            </label>
+                          </div>
+                      </div>
+                </div>
+          </div>       
+        </div>        
         <div id="single_price_box1 " class="">
-          <div class="row mb-3">
+          <div class="row">
+                                
+                <div class="col-12 col-md-3 plot-area-field mb-3">
+                    <label>{{ __('panel/product.plot_area') }}</label>
+                      <div class="plot-area-input">
+                        <input
+                          type="number"
+                          name="propertyProps[plot_area]"
+                          placeholder="{{ __('panel/product.plot_area') }}"
+                          class="plot-area-number"                       
+                          value="{{ old('propertyProps.plot_area', $product->propertyProps->plot_area ?? '') }}"
+                        />
+                        <select class="plot-area-type" name="propertyProps[plot_area_type]">
+                            @foreach($areaTypeOptions as $value => $label)
+                                <option
+                                    value="{{ $label['id'] }}"
+                                    {{ old('propertyProps.plot_area_type', $product->propertyProps->plot_area_type ?? '') == $label['id'] ? 'selected' : '' }}>
+                                    {{ $label['name'] }}
+                                </option>
+                            @endforeach
+                        </select>
+                      </div>
+                </div>  
+
                 <div class="col-12 col-md-3 plot-area-field">
                     <label>{{ __('panel/product.covered_area') }}</label>
                       <div class="plot-area-input">
@@ -390,6 +340,42 @@
                 </div>
                 
                 
+                <div class="col-12 col-md-3 plot-area-field">
+                    <label>{{ __('panel/product.price') }}</label>
+                      <div class="plot-area-input">
+                        <input
+                          type="number"
+                          name="propertyProps[price]"
+                          placeholder="{{ __('panel/product.price') }}"
+                          class="plot-area-number"                       
+                          value="{{ old('propertyProps.price', $product->propertyProps->price ?? '') }}"
+                        />
+                        <select class="plot-area-type" name="propertyProps[price_type]">
+                            @foreach($priceTypeOptions as $value => $label)
+                                <option
+                                    value="{{ $label['id'] }}"
+                                    {{ old('propertyProps.price_type', $product->propertyProps->price_type ?? '') == $label['id'] ? 'selected' : '' }}>
+                                    {{ $label['name'] }}
+                                </option>
+                            @endforeach
+                        </select>
+                      </div>
+                </div>  
+
+                <div class="col-12 col-md-3">
+                  <x-common-form-input :title="__('panel/product.city')" name="propertyProps[city]"
+                                    value="{{ old('propertyProps.city', $product->propertyProps->city ?? '') }}" />
+                </div>
+
+                <div class="col-12 col-md-3">
+                  <x-common-form-input :title="__('panel/product.location')" name="propertyProps[location]"
+                                    value="{{ old('propertyProps.location', $product->propertyProps->location ?? '') }}" />
+                </div>
+
+                <div class="col-12 col-md-3">
+                  <x-common-form-input :title="__('panel/product.address')" name="propertyProps[address]"
+                                    value="{{ old('propertyProps.address', $product->propertyProps->address ?? '') }}" />
+                </div>
                 <div class="col-12 col-md-3 form-group">                 
                       <label class="form-label">{{ __('panel/product.furnished_status') }}:</label>
                       <div class="radio-group">
@@ -450,40 +436,37 @@
                   <x-common-form-input :title="__('panel/product.maintenance_cost_period')" name="propertyProps[maintenance_cost_period]"
                                     value="{{ old('propertyProps.maintenance_cost_period', $product->propertyProps->maintenance_cost_period ?? '') }}" />
                 </div>
+                <div class="col-12 col-md-2">
+                  <x-common-form-switch-radio :title="__('panel/product.is_corner')" name="is_corner"
+                                          :value="old('is_corner', $product->is_corner ?? false)"/>
+                </div>          
+                
+                  @if (!auth()->user()->hasAnyRole(['Seller'])) 
+                      
 
-
+                      <div class="col-12 col-md-2">
+                        <x-common-form-switch-radio :title="__('panel/common.status')" name="active"
+                                                :value="old('active', $product->active ?? true)"/>
+                      </div>
+                      <div class="col-12 col-md-2">
+                        <x-common-form-switch-radio :title="__('panel/product.today_deal')" name="is_today_deal"
+                                                :value="old('is_today_deal', $product->is_today_deal ?? false)"/>
+                      </div>
+                      <div class="col-12 col-md-2">
+                        <x-common-form-switch-radio :title="__('panel/common.is_hot_deal')" name="is_hot_deal"
+                                                :value="old('is_hot_deal', $product->is_hot_deal ?? false)"/>
+                      </div>
+                      <div class="col-12 col-md-2">
+                        <x-common-form-switch-radio :title="__('panel/common.is_featured')" name="is_featured"
+                                                :value="old('is_featured', $product->is_featured ?? false)"/>
+                      </div>
+              @endif  
                     
             </div>
            
         </div>
       <!-- Properties Details Below End-->
     </div>  
-
-
-    @if (!auth()->user()->hasAnyRole(['Seller'])) 
-                
-        <div id="single_price_box1" class="">
-            <div class="row">
-                <div class="col-12 col-md-2">
-                  <x-common-form-switch-radio :title="__('panel/common.status')" name="active"
-                                          :value="old('active', $product->active ?? true)"/>
-                </div>
-                <div class="col-12 col-md-2">
-                  <x-common-form-switch-radio :title="__('panel/product.today_deal')" name="is_today_deal"
-                                          :value="old('is_today_deal', $product->is_today_deal ?? false)"/>
-                </div>
-                <div class="col-12 col-md-2">
-                  <x-common-form-switch-radio :title="__('panel/common.is_hot_deal')" name="is_hot_deal"
-                                          :value="old('is_hot_deal', $product->is_hot_deal ?? false)"/>
-                </div>
-                <div class="col-12 col-md-2">
-                  <x-common-form-switch-radio :title="__('panel/common.is_featured')" name="is_featured"
-                                          :value="old('is_featured', $product->is_featured ?? false)"/>
-                </div>
-              </div>
-          <!-- Properties Details Below End-->
-        </div> 
-    @endif  
 
     <div class="mt-5 mb-4">      
         <x-common-form-images title="{{ __('panel/common.image') }}" name="images"
@@ -524,41 +507,6 @@
 <script src="https://unpkg.com/element-plus/dist/index.full.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css">
 <script>
-
-$(document).ready(function () {
-    let slugEdited = false;
-    $('input[name="slug"]').on('input', function () {
-        slugEdited = true;
-    });
-
-    $('#prop_title').on('keyup', function () {
-        if (slugEdited) {
-            return;
-        }
-        let slug = $(this).val()
-            .toLowerCase()
-            .trim()
-            .replace(/[^a-z0-9\s-]/g, '')
-            .replace(/\s+/g, '-')
-            .replace(/-+/g, '-');
-
-        $('input[name="slug"]').val(slug);
-    });
-
-});
-
-
-  $(document).ready(function() {
-    const selectedCategories = @json(old('categories', $product->categories->pluck('id')->toArray()) ?? []);
-    if (selectedCategories.length > 0) {
-      const lastCategoryId = selectedCategories[selectedCategories.length - 1];
-      if(lastCategoryId==47 || lastCategoryId==48){
-        $('#additional_fields').show();
-      }else{
-        $('#additional_fields').hide();
-      }
-    }
-  });
 
   const productApp = Vue.createApp({
     data() {
@@ -631,11 +579,6 @@ $(document).ready(function () {
 
         const current = e[1];
         console.log("Current selected category:", current);
-        if(current==47 || current==48){
-          $('#additional_fields').show();
-        }else{
-          $('#additional_fields').hide();
-        }
        
 
         if (last) {

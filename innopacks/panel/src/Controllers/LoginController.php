@@ -9,6 +9,7 @@ use InnoShop\Panel\Requests\LoginRequest;
 use InnoShop\Common\Repositories\AdminRepo;
 use InnoShop\Common\Models\Admin;
 use App\Services\TwilioSmsService;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends BaseController
 {
@@ -318,8 +319,17 @@ class LoginController extends BaseController
                 'sms_otp_resend_count'  => 0,
             ]);
 
-            return redirect()->to(panel_route('login.index'))
-                ->with('success', 'Mobile number verified successfully. You can login now.');
+              // Login admin automatically
+            Auth::guard('admin')->login($admin);
+
+            // Regenerate session
+            $request->session()->regenerate();
+
+            return redirect(panel_route('products.create'))
+            ->with('success', 'Mobile verified successfully.');
+
+            // return redirect()->to(panel_route('login.index'))
+            //     ->with('success', 'Mobile number verified successfully. You can login now.');
 
         } catch (\Throwable $e) {
             return back()

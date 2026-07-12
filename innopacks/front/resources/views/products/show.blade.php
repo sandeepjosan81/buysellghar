@@ -17,9 +17,15 @@
   <link href="{{ asset('vendor/video-js/video-js.css') }}" rel="stylesheet">
   
 @endpush
+@php
+    $detect = new \Detection\MobileDetect;
+    $isMobile = $detect->isMobile();
+
+@endphp
 
 @push('style')
 <style>
+  
 #dealSlides {
     position: relative;
 }
@@ -377,7 +383,7 @@
           </div>
         </div>
         <div class="col-12 col-lg-2">
-          <h4>{{ __('front/product.share_this_product') }}</h4>
+          <?php /* <h4>{{ __('front/product.share_this_product') }}</h4>
           <div class="share-buttons icon-container d-flex gap-3 pt-4 pb-3 fsize25">
             <div class="share-button share-facebook-wrap">
                 <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($product->url) }}" target="_blank" class="share-button share-facebook">
@@ -404,8 +410,9 @@
               <i class="bi bi-whatsapp"></i>
             </a>
             </div>
-        </div>
-        <hr>
+        </div> */ ?>
+       
+        <!-- <hr> -->
         <!-- <h4>Today's Deals</h4> -->
             <div class="quick-deals p-2">
               <h2 class="h6 mb-3 fw-bold p-1">{{ __('front/product.todays_deals') }}</h2>
@@ -448,7 +455,7 @@
               </div>
           </div>
 
-      </div>
+        </div>
     </div>
 
     <div class="product-description">
@@ -506,29 +513,81 @@
 
   </div>
 
+  
+
+<div class="floating-share">
+
+    <button class="share-toggle" id="shareToggle">
+        <i class="bi bi-share-fill"></i>
+    </button>
+    <div class="share-icons" id="shareIcons">
+
+        <a href="https://api.whatsapp.com/send?text={{ urlencode($product->fallbackName().' '.$product->url) }}"  target="_blank"   class="whatsapp">
+            <i class="bi bi-whatsapp"></i>
+        </a>
+
+        <a href="https://www.instagram.com/YourInstagramUsername" target="_blank" class="instagram">
+            <i class="bi bi-instagram"></i>
+        </a>
+
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($product->url) }}"  target="_blank"  class="facebook">
+            <i class="bi bi-facebook"></i>
+        </a>
+
+        <a href="mailto:?subject={{ urlencode($product->fallbackName()) }}&body={{ urlencode($product->url) }}"  class="email">
+            <i class="bi bi-envelope-fill"></i>
+        </a>
+
+        <a href="javascript:void(0)"
+           class="copy-link"
+           onclick="copyProductLink()">
+            <i class="bi bi-link-45deg"></i>
+        </a>
+
+    </div>
+
+</div>
 @endsection
 
 @push('footer')
 
 <script>
-  // fade in fade out
-  //   document.addEventListener("DOMContentLoaded", function () {
-  //     const slides = document.querySelectorAll('.deal-slide');
-  //     let current = 0;
 
-  //     function showNextSlide() {
-  //         // fade out current
-  //         slides[current].classList.remove('active');
+  // Social Share Toggle
+    document.addEventListener("DOMContentLoaded", function () {
 
-  //         // move to next
-  //         current = (current + 1) % slides.length;
+        const toggle = document.getElementById("shareToggle");
+        const icons = document.getElementById("shareIcons");
 
-  //         // fade in next
-  //         slides[current].classList.add('active');
-  //     }
+        toggle.addEventListener("click", function () {
 
-  //     setInterval(showNextSlide, 3000); // 3 sec
-  // });
+            if (window.innerWidth < 992) {
+                icons.classList.toggle("open");
+
+                if (icons.classList.contains("open")) {
+                    toggle.innerHTML = '<i class="bi bi-x-lg"></i>';
+                } else {
+                    toggle.innerHTML = '<i class="bi bi-share-fill"></i>';
+                }
+            }
+
+        });
+
+    });
+
+  document.addEventListener("DOMContentLoaded", function(){
+
+    const toggle = document.getElementById("shareToggle");
+    const icons = document.getElementById("shareIcons");
+
+    toggle.addEventListener("click", function(e){
+
+
+
+    });
+
+});
+
 </script>
 
   <script>

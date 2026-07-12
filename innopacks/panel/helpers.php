@@ -131,7 +131,7 @@ if (! function_exists('panel_route')) {
         try {
             return route($panelName.'.'.$name, $parameters, $absolute);
         } catch (\Exception $e) {
-            return route($panelName.'.products.index');
+            return route($panelName.'.dashboard.index');
         }
 
     }

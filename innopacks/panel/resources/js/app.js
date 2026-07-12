@@ -231,7 +231,7 @@ const FileManager = {
       }
       return processedFile;
     };
-console.log("Here app layer");
+    console.log("Here app layer", `${urls.panel_base}`);
     layer.open({
       type: 2,
       title: "File Manager",

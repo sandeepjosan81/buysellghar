@@ -146,7 +146,7 @@
                     </div>                    
 
                     <div class="form-group mb-3">
-                      <label for="contact_no"><i class="bi bi-whatsapp"></i>{{ __('front/common.contact_no') }}</label>
+                      <label for="contact_no"><i class="bi bi-whatsapp m-1"></i>{{ __('front/common.contact_no') }}</label>
                       <input type="text" name="contact_no" class="field" id="contact_no" minlength="10"
        maxlength="15" value="{{ old('contact_no') }}" placeholder="{{ __('front/common.contact_no') }}" required>
                       @error('contact_no')
