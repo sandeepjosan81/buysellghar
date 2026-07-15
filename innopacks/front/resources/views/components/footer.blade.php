@@ -146,12 +146,27 @@
                     </div>                    
 
                     <div class="form-group mb-3">
-                      <label for="contact_no"><i class="bi bi-whatsapp m-1"></i>{{ __('front/common.contact_no') }}</label>
-                      <input type="text" name="contact_no" class="field" id="contact_no" minlength="10"
-       maxlength="15" value="{{ old('contact_no') }}" placeholder="{{ __('front/common.contact_no') }}" required>
-                      @error('contact_no')
-                      <div class="invalid-feedback d-block">{{ $message }}</div>
-                      @enderror
+                        <label for="contact_no"><i class="bi bi-whatsapp m-1"></i>{{ __('front/common.contact_no') }}</label>
+                        <input type="text" name="contact_no" class="field" id="contact_no" minlength="10" maxlength="15" value="{{ old('contact_no') }}" placeholder="{{ __('front/common.contact_no') }}" required>
+                        @error('contact_no')
+                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="interested_in">{{ __('front/common.interested_in') }}</label>
+                        <select name="interested_in" class="field" id="interested_in" required>
+                          <option value="" disabled selected>{{ __('front/common.interested_in') }}</option>
+                          <option value="Flat">{{ __('front/common.Flat') }}</option>
+                          <option value="Villa">{{ __('front/common.Villa') }}</option>
+                          <option value="Plot">{{ __('front/common.Plot') }}</option>
+                          <option value="Land">{{ __('front/common.Land') }}</option>
+                          <option value="Commercial">{{ __('front/common.Commercial') }}</option>
+                        </select>
+                        
+                        @error('interested_in')
+                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     @if (session('error'))

@@ -21,9 +21,6 @@ class LeadContactController extends Controller
      */
     public function index(): mixed
     {
-        echo "testing"; 
-        exit;
-
         $data = [
             'brands' => BrandRepo::getInstance()->withActive()->all()->groupBy('first'),
         ];

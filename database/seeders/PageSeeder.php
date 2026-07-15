@@ -328,7 +328,7 @@ class PageSeeder extends Seeder
 <h3>6. 联系我们</h3>
 <p>如果您有任何关于隐私政策的疑问，请联系我们：</p>
 <p>邮箱：privacy@innoshop.com</p>',
-                'meta_title'       => '隐私政策 - InnoShop',
+                'meta_title'       => '隐私政策',
                 'meta_description' => 'InnoShop 隐私政策说明',
                 'meta_keywords'    => '隐私政策,数据保护,个人信息',
             ],

@@ -61,17 +61,24 @@ class Sidebar extends Component
                 'title' => __('panel/menu.dashboard'),
                 'icon'  => 'bi-speedometer2',
             ],
+            
             [
                 'title'    => __('panel/menu.top_order'),
                 'icon'     => 'bi-cart',
                 'prefixes' => ['orders', 'rmas'],
                 'children' => $this->getOrderSubRoutes(),
             ],
+            
             [
                 'title'    => __('panel/menu.top_product'),
                 'icon'     => 'bi-bag',
                 'prefixes' => ['products', 'options', 'option_values', 'attribute_groups'],
                 'children' => $this->getProductSubRoutes(),
+            ],
+            [
+                'route' => 'leadcontacts.index',
+                'title' => __('panel/menu.leadcontacts'),
+                'icon'  => 'bi-envelope',
             ],
             [
                 'title'    => __('panel/menu.top_customer'),

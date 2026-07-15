@@ -65,4 +65,5 @@ return [
     'withdrawals'       => 'Withdrawals',
     'plugin_market'     => 'Plugin Market',
     'theme_market'      => 'Theme Market',
+    'leadcontacts'      => 'Lead Contacts',
 ];

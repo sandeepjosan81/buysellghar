@@ -64,4 +64,12 @@ return [
     'interested_in' => 'Interested In',
     'btn_submit' => 'Submit',
     'post_text_mobile' => 'Post Property',
+    'Flat' => 'Flat',
+    'Plot' => 'Plot',
+    'Villa' => 'Kothi/Villa',
+    'Kothi' => 'Kothi',
+    'House' => 'House',
+    'Land' => 'Land',
+    'Commercial' => 'Commercial',
+    'updated_at' => 'Updated At',
 ];

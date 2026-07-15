@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <base href="{{ panel_route('home.index') }}">
-  <title>{{ $plugin->getLocaleName() }} - InnoShop</title>
+  <title>{{ $plugin->getLocaleName() }}</title>
   <meta name="keywords" content="@yield('keywords', 'InnoShop, Innovative, Open Source, Laravel, Multi-language, Multi-currency, Hook, Plugin Architecture, Flexible, Powerful')">
   <meta name="generator" content="InnoShop {{ innoshop_version() }}">
   <meta name="asset" content="{{ asset('/') }}">

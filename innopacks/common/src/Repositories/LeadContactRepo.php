@@ -14,13 +14,17 @@ use Throwable;
 
 class LeadContactRepo extends BaseRepo
 {
-    // public function getActiveCategories($limit = 10): Collection
-    // {
-    //     $filters = ['active' => true];
-
-    //     return $this->builder($filters)->limit($limit)->get();
-    // }
-
+    
+    public static function getCriteria(): array
+    {
+        return [
+            ['name' => 'name', 'type' => 'input', 'label' => trans('panel/leadcontact.name')],
+            ['name' => 'contact', 'type' => 'input', 'label' => trans('panel/leadcontact.contact')],
+            ['name' => 'email', 'type' => 'input', 'label' => trans('panel/leadcontact.email')],
+            ['name' => 'property_url', 'type' => 'input', 'label' => trans('panel/leadcontact.property_url')],
+            ['name' => 'interested_in', 'type' => 'input', 'label' => trans('panel/leadcontact.interested_in')],
+        ];
+    }
 
     /**
      * @return array
@@ -35,6 +39,12 @@ class LeadContactRepo extends BaseRepo
 
         return $perPages;
     }
+
+    // public function getActiveCategories($limit = 10): Collection
+    // {
+    //     $filters = ['active' => true];
+    //     return $this->builder($filters)->limit($limit)->get();
+    // }
 
     // /**
     //  * Format categories for cascader component

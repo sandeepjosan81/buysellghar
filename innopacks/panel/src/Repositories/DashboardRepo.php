@@ -22,12 +22,12 @@ class DashboardRepo extends BaseRepo
         $validOrderBuilder = OrderRepo::getInstance()->builder($filters);
 
         return [
-            [
-                'title'    => panel_trans('dashboard.order_quantity'),
-                'icon'     => 'bi bi-cart',
-                'quantity' => $validOrderBuilder->count(),
-                'url'      => panel_route('orders.index'),
-            ],
+            // [
+            //     'title'    => panel_trans('dashboard.order_quantity'),
+            //     'icon'     => 'bi bi-cart',
+            //     'quantity' => $validOrderBuilder->count(),
+            //     'url'      => panel_route('orders.index'),
+            // ],
             [
                 'title'    => panel_trans('dashboard.product_quantity'),
                 'icon'     => 'bi bi-bag',
@@ -40,12 +40,12 @@ class DashboardRepo extends BaseRepo
                 'quantity' => Customer::query()->count(),
                 'url'      => panel_route('customers.index'),
             ],
-            [
-                'title'    => panel_trans('dashboard.order_amount'),
-                'icon'     => 'bi bi-gem',
-                'quantity' => currency_format($validOrderBuilder->sum('total')),
-                'url'      => panel_route('orders.index'),
-            ],
+            // [
+            //     'title'    => panel_trans('dashboard.order_amount'),
+            //     'icon'     => 'bi bi-gem',
+            //     'quantity' => currency_format($validOrderBuilder->sum('total')),
+            //     'url'      => panel_route('orders.index'),
+            // ],
         ];
     }
 }
