@@ -678,7 +678,7 @@ class ProductRepo extends BaseRepo
             }
 
             $skus = $this->handleSkus($data['skus'] ?? []);
-
+           
            
             if (isset($data['price_type']) && $data['price_type'] === 'single' && ! empty($skus)) {
                 $product->update(['variables' => []]);
@@ -689,8 +689,9 @@ class ProductRepo extends BaseRepo
             // Store the product properties for real estate
             $propertyProps = $data['propertyProps'] ?? null;
             $propertyProps['list_type']= $data['categories']['0'] ?? '';
+            $propertyProps['is_corner']=$data['is_corner'] ?? 0;
             // echo "<pre>";
-            // print_r($propertyProps);
+            // print_r($product->propertyProps->is_corner);
             // exit;
             // 
             if ($isUpdating) {
@@ -1111,7 +1112,7 @@ class ProductRepo extends BaseRepo
         return Product::query()
             ->where('is_featured', true)
             // ->where('id', '!=', $product->id)
-            ->with(['translation', 'masterSku','reviews'])
+            ->with(['translation', 'masterSku','reviews','admin'])
             ->inRandomOrder()
             ->limit(8)
             ->get();
@@ -1121,7 +1122,7 @@ class ProductRepo extends BaseRepo
      {
         $products = Product::with('productCategories')
             ->where('is_hot_deal', 1)
-             ->with(['translation', 'masterSku','reviews'])
+             ->with(['translation', 'masterSku','reviews','admin'])
              ->inRandomOrder()
              ->limit(10)
             ->get();
@@ -1132,6 +1133,7 @@ class ProductRepo extends BaseRepo
     {
         return $this->withActive()->builder()
             ->orderByDesc('viewed')
+            ->with('admin')
              ->with(['translation', 'masterSku',"reviews"])
             ->limit($limit)
             ->get();
@@ -1144,6 +1146,7 @@ class ProductRepo extends BaseRepo
             ->whereHas('propertyProps', function ($query) {
                 $query->where('property_for', 'sale');
             })
+            ->with('admin')
             ->with('propertyProps')
             ->orderByDesc('updated_at')
             ->limit($limit)
@@ -1156,6 +1159,7 @@ class ProductRepo extends BaseRepo
             ->whereHas('propertyProps', function ($query) {
                 $query->where('property_for', 'rent');
             })
+            ->with('admin')
             ->with('propertyProps')
             ->orderByDesc('updated_at')
             ->limit($limit)

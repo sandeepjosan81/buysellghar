@@ -259,7 +259,7 @@
           </div>  
                   <div class="col-12 col-md-2">
           <x-common-form-switch-radio :title="__('panel/product.is_corner')" name="is_corner"
-                                  :value="old('is_corner', $product->is_corner ?? false)"/>
+                                  :value="old('is_corner', $product->propertyProps->is_corner ?? false)"/>
         </div>      
                 
           
@@ -494,9 +494,7 @@
 
         <?php /* @include('panel::products.form._form_video') */ ?>        
         @include('panel::products.panes.tab_pane_content', $product)
-    </div>
-      
-    </div>
+    </div>      
   </div>
     
   @hookinsert('panel.product.edit.basic.after')

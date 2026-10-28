@@ -16,6 +16,7 @@ use InnoShop\Common\Models\Product\PropertyProps;
 use InnoShop\Common\Traits\HasPackageFactory;
 use InnoShop\Common\Traits\Replicate;
 use InnoShop\Common\Traits\Translatable;
+use InnoShop\Common\Models\Admin;
 
 class Product extends BaseModel
 {
@@ -55,6 +56,10 @@ class Product extends BaseModel
         return $this->hasOne(PropertyProps::class, 'product_id', 'id');
     }
 
+        public function admin()
+    {
+        return $this->belongsTo(Admin::class, 'admin_id', 'id');
+    }
 
     /**
      * @return HasOne
