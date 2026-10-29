@@ -64,17 +64,21 @@
                     </div>
                     @endif
                 </div>
+                @php
+                    $detect = new \Detection\MobileDetect;
+                    $isMobile = $detect->isMobile();
+                    
+                @endphp
                 <div class=" product-bottom-btns d-flex gap-2 mt-3">
                     <div class="contact-now">
                         <!-- <a href="{{ $product->url }}" class="cursor-pointer btn btn-sm btn-cart fw-semibold" >{{ __('front/common.view_details') }}</a> -->
-                        <button class="contact-btn custom_contact" data-url="{{ $product->url }}" data-product-id="{{ $product->id }}" data-bs-toggle="modal" data-bs-target="#leadContactModal">☎ Contact</button>
+                        <button class="{{ $isMobile ? 'contact-btn-mob' : 'contact-btn custom_contact' }}" data-url="{{ $product->url }}" data-product-id="{{ $product->id }}" data-seller-contact="{{ @$product->admin->whatsapp_no }}" data-bs-toggle="modal" data-bs-target="#leadContactModal">☎ Contact</button>
                     </div>
-                    <div class="add-wishlist contact-btn btn-cart " data-in-wishlist="{{ $product->hasFavorite() }}"
+                    <div class=" {{ $isMobile ? 'contact-btn-mob' : 'add-wishlist contact-btn btn-cart'}}" data-in-wishlist="{{ $product->hasFavorite() }}"
                         data-id="{{ $product->id }}" data-price="{{ $product->masterSku->price }}">
                         <i class="bi bi-heart{{ $product->hasFavorite() ? '-fill' : '' }}"></i>
                         {{ __('front/product.add_wishlist') }}
                     </div>
-                    <?php /* @endif */ ?>
                 </div>
 
             <!-- </div> -->
